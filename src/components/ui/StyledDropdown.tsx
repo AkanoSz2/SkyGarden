@@ -12,9 +12,10 @@ type Props = {
     value: DropdownItem;
     onChange: (item: DropdownItem) => void;
     renderItem?: (item: DropdownItem) => React.ReactNode;
+    forceDirection?: "up" | "down";
 };
 
-export function StyledDropdown({ items, value, onChange, renderItem }: Props) {
+export function StyledDropdown({ items, value, onChange, renderItem, forceDirection }: Props) {
     const [open, setOpen] = useState(false);
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,7 +43,13 @@ export function StyledDropdown({ items, value, onChange, renderItem }: Props) {
             const dropdownMaxHeight = 220;
             const spaceBelow = window.innerHeight - rect.bottom;
             const spaceAbove = rect.top;
-            const openDown = spaceBelow >= dropdownMaxHeight || spaceBelow >= spaceAbove;
+
+            const openDown = forceDirection === "down"
+                ? true
+                : forceDirection === "up"
+                    ? false
+                    : spaceBelow >= dropdownMaxHeight || spaceBelow >= spaceAbove;
+
             const top = openDown
                 ? rect.bottom + window.scrollY
                 : rect.top + window.scrollY - dropdownMaxHeight;
@@ -72,7 +79,7 @@ export function StyledDropdown({ items, value, onChange, renderItem }: Props) {
 
             {open && createPortal(
                 <div
-                    ref={dropdownRef}  // ← add this ref
+                    ref={dropdownRef}
                     className="border border-secondary rounded bg-dark"
                     style={{
                         position: "absolute",
@@ -92,7 +99,7 @@ export function StyledDropdown({ items, value, onChange, renderItem }: Props) {
                             className="px-2 py-1 text-light d-flex align-items-center gap-2"
                             style={{ cursor: "pointer" }}
                             onMouseDown={(e) => {
-                                e.preventDefault(); 
+                                e.preventDefault();
                                 onChange(item);
                                 setOpen(false);
                             }}
@@ -113,6 +120,7 @@ type NumericDropdownProps = {
     value: number;
     onChange: (value: number) => void;
     renderItem?: (value: number) => React.ReactNode;
+    forceDirection?: "up" | "down";
 };
 
 export function StyledDropdownNumber({
@@ -120,30 +128,25 @@ export function StyledDropdownNumber({
                                          max,
                                          value,
                                          onChange,
-                                         renderItem
+                                         renderItem,
+                                         forceDirection
                                      }: NumericDropdownProps) {
-
     const items: DropdownItem[] = Array.from(
         { length: max - min + 1 },
         (_, i) => {
             const n = min + i;
-            return {
-                name: String(n),
-                img: "",
-                value: String(n)
-            };
+            return { name: String(n), img: "", value: String(n) };
         }
     );
 
-    const selected =
-        items.find(i => Number(i.name) === value)
-        ?? items[0];
+    const selected = items.find(i => Number(i.name) === value) ?? items[0];
 
     return (
         <StyledDropdown
             items={items}
             value={selected}
             onChange={(item) => onChange(Number(item.name))}
+            forceDirection={forceDirection}
             renderItem={
                 renderItem
                     ? (item) => renderItem(Number(item.name))

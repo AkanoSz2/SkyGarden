@@ -1,4 +1,15 @@
 import { useState } from "react";
+import type { TableGreenhouseRow } from "../shared/types";
+import { formatCropName, RarityColors, type Rarity } from "../shared/CropData";
+
+type RatesPanelProps = {
+    greenhouseRows: TableGreenhouseRow[];
+    farmingFortune: number;
+    cropFortune: Record<string, number>,
+    tooltipData: Record<string, { label: string; value: string; color: string }[]>;
+    overbloomData: Record<string, { label: string; value: string; color: string }[]>;
+    chipData: Record<string, { label: string; value: string; color: string }[]>;
+};
 
 type Column = {
     id: string;
@@ -19,16 +30,29 @@ type TableSchema = {
     rows: Row[];
 };
 
-type CropDrop = {
-    id: string;
-    name: string;
-    drops: number;
-};
-
 type ExtraStat = {
     label: string;
     value: string;
     color: string;
+};
+
+type ProfitCostItem = {
+    label: string;
+    cropId: string;
+    value: number;
+};
+
+type ProfitDropItem = {
+    label: string;
+    cropId: string;
+    value: number;
+    positive?: boolean;
+};
+
+type CollectionItem = {
+    label: string;
+    cropId: string;
+    value: number;
 };
 
 type ExtraConfig = {
@@ -40,6 +64,12 @@ type ExtraConfig = {
     stats: ExtraStat[];
     contribution: string;
     contributionColor: string;
+    profitBreakdown?: {
+        costs: ProfitCostItem[];
+        drops: ProfitDropItem[];
+    };
+    collectionGains?: CollectionItem[];
+    sowdustTotal?: number;
 };
 
 type SubPanelFactor = {
@@ -56,72 +86,264 @@ type SubPanelConfig = {
     totalValue: string;
 };
 
-const STATIC_DROPS: CropDrop[] = [
-    { id: "pumpkin", name: "Pumpkin", drops: 100 },
-    { id: "wheat", name: "Wheat", drops: 50 },
-    { id: "wild_rose", name: "Wild Rose", drops: 72 },
-    { id: "dead_plant", name: "Dead Plant", drops: 38 },
-];
+
 
 const SUBPANEL_CONFIG: SubPanelConfig = {
     note: "Dunno, should prob add some info about the data here",
     factors: [
-        { label: "Farming Fortune", value: "850", color: "#60a5fa" },
+        { label: "Farming Fortune", value: "3600", color: "#60a5fa" },
         { label: "Crops placed", value: "27", color: "#60a5fa" },
-        { label: "Cycles (drops)", value: "300", color: "#60a5fa" },
         { label: "Crop Effect", value: "+30%", color: "#4ade80" },
         { label: "Unique crop bonus", value: "+12%", color: "#4ade80" },
     ],
     extras: [
         {
-            tag: "Fever",
-            tagColor: "#c084fc",
+            tag: "Collection",
+            tagColor: "#fc84fa",
             tagBg: "#2d1a40",
             borderColor: "#2d1a40",
-            description: "Figure it out",
-            stats: [
-                { label: "Drop amount", value: "300", color: "#c084fc" },
-                { label: "FF applies", value: "No", color: "#ef4444" },
-                { label: "Trigger", value: "Per session", color: "#c084fc" },
-                { label: "Stackable", value: "No", color: "#ef4444" },
-            ],
+            description: "Total collection gain",
+            stats: [],
             contribution: "620 crops",
             contributionColor: "#c084fc",
+            collectionGains: [
+                { label: "Brown Mushroom", cropId: "brown_mushroom", value: 123456 },
+                { label: "Red Mushroom", cropId: "red_mushroom", value: 123456 },
+                { label: "Pumpkin", cropId: "pumpkin", value: 123456 },
+            ],
         },
         {
-            tag: "Flasks",
-            tagColor: "#60a5fa",
-            tagBg: "#1e3a5b",
+            tag: "Profit",
+            tagColor: "#fff",
+            tagBg: "#f6a80d",
             borderColor: "#1e3a5b",
-            description: "20% spawn chance across TBA spawns",
-            stats: [
-                { label: "Spawn chance", value: "20%", color: "#60a5fa" },
-                { label: "Total spawns", value: "48", color: "#60a5fa" },
-                { label: "Expected spawns", value: "~9.6", color: "#60a5fa" },
-                { label: "Drop amount", value: "900", color: "#60a5fa" },
-            ],
+            description: "Expected Profit",
+            stats: [],
             contribution: "~320",
             contributionColor: "#60a5fa",
+            profitBreakdown: {
+                costs: [
+                    { label: "Zombud x4", cropId: "zombud", value: 1200 },
+                    { label: "Puffercloud x4", cropId: "puffercloud", value: 800 },
+                ],
+                drops: [
+                    { label: "Brown Mushroom", cropId: "brown_mushroom", value: 12345 },
+                    { label: "Red Mushroom", cropId: "red_mushroom", value: 12345 },
+                    { label: "Pumpkin", cropId: "pumpkin", value: 12345 },
+                    { label: "Devourer x16", cropId: "devourer", value: 1234567, positive: true },
+                ],
+            },
         },
         {
-            tag: "Between Cycles",
-            tagColor: "#fbbf24",
-            tagBg: "#3a2a00",
-            borderColor: "#3a2a00",
-            description: "20% spawn chance across TBA spawns",
-            stats: [
-                { label: "Spawn chance", value: "20%", color: "#fbbf24" },
-                { label: "Total spawns", value: "120", color: "#fbbf24" },
-                { label: "Expected spawns", value: "~24", color: "#fbbf24" },
-                { label: "Drop amount", value: "20", color: "#fbbf24" },
-            ],
-            contribution: "~900",
-            contributionColor: "#fbbf24",
+            tag: "Sowdust",
+            tagColor: "#C8E6C9",
+            tagBg: "#2E7D32",
+            borderColor: "#1e3a5b",
+            description: "Estimated Sowdust Gain",
+            stats: [],
+            contribution: "~320",
+            contributionColor: "#60a5fa",
+            sowdustTotal: 4800,
         },
     ],
     totalLabel: "This crop brings a total of",
     totalValue: "7,600 Pumpkin",
 };
+
+function fortuneDropsFormula(fortune: number, base: number) {
+    const cropYield = 1.86;
+    const chipYield = 1.66
+    const totalFortune = (1 + fortune / 100);
+
+    return (cropYield * chipYield * totalFortune * base)
+}
+
+
+function ItemRow({ cropId, label, value, valueColor }: { cropId: string; label: string; value: number; valueColor: string }) {
+    return (
+        <div
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "4px 0",
+                fontSize: "12.5px",
+                borderBottom: "1px solid #1e2535",
+                gap: "10px",
+            }}
+        >
+            <div style={{ display: "flex", alignItems: "center", gap: "7px", color: "#94a3b8", minWidth: 0 }}>
+                <img
+                    src={`/greenhouse/crops/${cropId}.png`}
+                    alt={label}
+                    style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "3px",
+                        background: "#1e293b",
+                        flexShrink: 0,
+                    }}
+                />
+                <span
+                    style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                    }}
+                >
+                    {label}
+                </span>
+            </div>
+            <span style={{ fontWeight: 500, color: valueColor }}>
+                {value.toLocaleString()}
+            </span>
+        </div>
+    );
+}
+
+function ColumnLabel({ children }: { children: React.ReactNode }) {
+    return (
+        <div
+            style={{
+                fontSize: "10px",
+                fontWeight: 600,
+                color: "#334155",
+                letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                marginBottom: "6px",
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+function CollectionGains({ items }: { items: CollectionItem[] }) {
+    return (
+        <div style={{ padding: "8px 12px" }}>
+            <ColumnLabel>Collection gain</ColumnLabel>
+
+            {items.map(item => (
+                <ItemRow
+                    key={item.label}
+                    cropId={item.cropId}
+                    label={item.label}
+                    value={item.value}
+                    valueColor="#cbd5e1"
+                />
+            ))}
+        </div>
+    );
+}
+
+function SowdustGain({ total }: { total: number }) {
+    return (
+        <div style={{ padding: "8px 12px" }}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                }}
+            >
+                <div style={{ display: "flex", alignItems: "center", gap: "7px", color: "#94a3b8", minWidth: 0 }}>
+                    <img
+                        src="/greenhouse/misc/sowdust.png"
+                        alt="Sowdust"
+                        style={{
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "3px",
+                            background: "#1e293b",
+                            flexShrink: 0,
+                        }}
+                    />
+                    <span>Total sowdust gain</span>
+                </div>
+                <span
+                    style={{
+                        background: "#102a1d",
+                        border: "1px solid #2E7D32",
+                        borderRadius: "2px",
+                        padding: "3px 12px",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        color: "#C8E6C9",
+                    }}
+                >
+                    {total.toLocaleString()}
+                </span>
+            </div>
+        </div>
+    );
+}
+
+function ProfitBreakdown({ costs, drops }: { costs: ProfitCostItem[]; drops: ProfitDropItem[] }) {
+    const totalCost = costs.reduce((s, c) => s + c.value, 0);
+    const totalProfit = drops.reduce((s, d) => s + d.value, 0);
+    const total = totalProfit - totalCost;
+    const isProfit = total >= 0;
+
+    return (
+        <div style={{ padding: "8px 12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 24px" }}>
+                <div>
+                    <ColumnLabel>Cost</ColumnLabel>
+
+                    {costs.map(c => (
+                        <ItemRow key={c.label} cropId={c.cropId} label={c.label} value={c.value} valueColor="#ef4444" />
+                    ))}
+                </div>
+
+                <div>
+                    <ColumnLabel>Output</ColumnLabel>
+
+                    {drops.map(d => (
+                        <ItemRow
+                            key={d.label}
+                            cropId={d.cropId}
+                            label={d.label}
+                            value={d.value}
+                            valueColor={d.positive ? "#4ade80" : "#cbd5e1"}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div style={{ borderTop: "1px solid #1e2535", margin: "12px 0" }} />
+
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                }}
+            >
+                <span style={{ fontSize: "12px", color: "#64748b" }}>
+                    {isProfit ? "Net profit" : "Net loss"}
+                </span>
+                <span
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        background: isProfit ? "#0f2a1a" : "#2a1414",
+                        border: `1px solid ${isProfit ? "#166534" : "#7f1d1d"}`,
+                        borderRadius: "2px",
+                        padding: "3px 12px",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        color: isProfit ? "#4ade80" : "#ef4444",
+                    }}
+                >
+                    {isProfit ? "+" : ""}{total.toLocaleString()}
+                </span>
+            </div>
+        </div>
+    );
+}
 
 function ExtraMenu({ config }: { config: ExtraConfig }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -180,54 +402,75 @@ function ExtraMenu({ config }: { config: ExtraConfig }) {
 
             {isOpen && (
                 <>
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            padding: "8px 12px",
-                            gap: "4px 0",
-                        }}
-                    >
-                        {config.stats.map(({ label, value, color }) => (
+                    {config.profitBreakdown ? (
+                        <ProfitBreakdown
+                            costs={config.profitBreakdown.costs}
+                            drops={config.profitBreakdown.drops}
+                        />
+                    ) : config.collectionGains ? (
+                        <CollectionGains items={config.collectionGains} />
+                    ) : config.sowdustTotal !== undefined ? (
+                        <SowdustGain total={config.sowdustTotal} />
+                    ) : (
+                        <>
                             <div
-                                key={label}
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr 1fr",
+                                    padding: "8px 12px",
+                                    gap: "4px 0",
+                                }}
+                            >
+                                {config.stats.map(({ label, value, color }) => (
+                                    <div
+                                        key={label}
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            padding: "2px 6px 2px 0",
+                                            fontSize: "12px",
+                                            borderBottom: "1px solid #1a1228",
+                                        }}
+                                    >
+                                        <span style={{ color: "#475569" }}>{label}</span>
+                                        <span style={{ color, fontWeight: 500 }}>{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div
                                 style={{
                                     display: "flex",
                                     justifyContent: "space-between",
                                     alignItems: "center",
-                                    padding: "2px 6px 2px 0",
+                                    padding: "6px 12px",
+                                    borderTop: `1px solid ${config.borderColor}`,
                                     fontSize: "12px",
-                                    borderBottom: "1px solid #1a1228",
                                 }}
                             >
-                                <span style={{ color: "#475569" }}>{label}</span>
-                                <span style={{ color, fontWeight: 500 }}>{value}</span>
+                                <span style={{ color: "#475569" }}>Contribution to total</span>
+                                <span style={{ color: config.contributionColor, fontWeight: 600 }}>
+                                    {config.contribution}
+                                </span>
                             </div>
-                        ))}
-                    </div>
-
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: "6px 12px",
-                            borderTop: `1px solid ${config.borderColor}`,
-                            fontSize: "12px",
-                        }}
-                    >
-                        <span style={{ color: "#475569" }}>Contribution to total</span>
-                        <span style={{ color: config.contributionColor, fontWeight: 600 }}>
-                            {config.contribution}
-                        </span>
-                    </div>
+                        </>
+                    )}
                 </>
             )}
         </div>
     );
 }
 
-function SubMenu({ config }: { config: SubPanelConfig }) {
+function SubMenu({
+                     config,
+                     drops,
+                     count,
+                 }: {
+    config: SubPanelConfig;
+    drops: Record<string, number>;
+    count: number;
+}) {
     return (
         <div
             style={{
@@ -282,7 +525,9 @@ function SubMenu({ config }: { config: SubPanelConfig }) {
                             }}
                         >
                             <span style={{ color: "#64748b" }}>{label}</span>
-                            <span style={{ color, fontWeight: 500 }}>{value}</span>
+                            <span style={{ color, fontWeight: 500 }}>
+                                {label === "Crops placed" ? count : value}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -301,54 +546,60 @@ function SubMenu({ config }: { config: SubPanelConfig }) {
                         Drops per crop
                     </div>
 
-                    {STATIC_DROPS.map(crop => (
-                        <div
-                            key={crop.id}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                padding: "4px 0",
-                                fontSize: "12.5px",
-                                borderBottom: "1px solid #1e2535",
-                                gap: "10px",
-                            }}
-                        >
+                    {Object.entries(drops).length === 0 ? (
+                        <div style={{ fontSize: "12px", color: "#475569", padding: "4px 0" }}>
+                            No drops data.
+                        </div>
+                    ) : (
+                        Object.entries(drops).map(([cropId, amount]) => (
                             <div
+                                key={cropId}
                                 style={{
                                     display: "flex",
                                     alignItems: "center",
-                                    gap: "7px",
-                                    color: "#94a3b8",
-                                    minWidth: 0,
+                                    justifyContent: "space-between",
+                                    padding: "4px 0",
+                                    fontSize: "12.5px",
+                                    borderBottom: "1px solid #1e2535",
+                                    gap: "10px",
                                 }}
                             >
-                                <img
-                                    src={`/greenhouse/crops/${crop.id}.png`}
-                                    alt={crop.name}
+                                <div
                                     style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        borderRadius: "3px",
-                                        background: "#1e293b",
-                                        flexShrink: 0,
-                                    }}
-                                />
-                                <span
-                                    style={{
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "nowrap",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "7px",
+                                        color: "#94a3b8",
+                                        minWidth: 0,
                                     }}
                                 >
-                                    {crop.name}
+                                    <img
+                                        src={`/greenhouse/crops/${cropId}.png`}
+                                        alt={formatCropName(cropId)}
+                                        style={{
+                                            width: "20px",
+                                            height: "20px",
+                                            borderRadius: "3px",
+                                            background: "#1e293b",
+                                            flexShrink: 0,
+                                        }}
+                                    />
+                                    <span
+                                        style={{
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap",
+                                        }}
+                                    >
+                                        {formatCropName(cropId)}
+                                    </span>
+                                </div>
+                                <span style={{ fontWeight: 500, color: "#cbd5e1" }}>
+                                    {amount}
                                 </span>
                             </div>
-                            <span style={{ fontWeight: 500, color: "#cbd5e1" }}>
-                                {crop.drops}
-                            </span>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
 
@@ -371,24 +622,6 @@ function SubMenu({ config }: { config: SubPanelConfig }) {
                 <ExtraMenu key={i} config={extra} />
             ))}
 
-            <div style={{ borderTop: "1px solid #1e2535", margin: "12px 0" }} />
-
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-                <span style={{ fontSize: "12px", color: "#64748b" }}>{config.totalLabel}</span>
-                <span
-                    style={{
-                        background: "#0f2a1a",
-                        border: "1px solid #166534",
-                        borderRadius: "20px",
-                        padding: "3px 12px",
-                        fontSize: "13px",
-                        fontWeight: 600,
-                        color: "#4ade80",
-                    }}
-                >
-                    {config.totalValue}
-                </span>
-            </div>
         </div>
     );
 }
@@ -414,7 +647,89 @@ function renderHeader(headers: Column[]) {
     );
 }
 
-function renderRow(
+function renderGreenhouseRow(
+    row: TableGreenhouseRow,
+    columns: Column[],
+    openRows: Set<string>,
+    setOpenRows: React.Dispatch<React.SetStateAction<Set<string>>>
+) {
+    const isOpen = openRows.has(row.id);
+    const colors = RarityColors[row.rarity as Rarity];
+
+    const dropEntries = Object.entries(row.drops);
+    const totalDrops = dropEntries.reduce((sum, [, amt]) => sum + amt, 0);
+    const dropSummary = dropEntries
+        .map(([cropId, amt]) => `${formatCropName(cropId)}: ${amt}`)
+        .join(", ");
+
+    const toggle = () => {
+        setOpenRows(prev => {
+            const next = new Set(prev);
+            if (next.has(row.id)) next.delete(row.id);
+            else next.add(row.id);
+            return next;
+        });
+    };
+
+    return (
+        <>
+            <div
+                key={row.id}
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+                    padding: "5px 20px",
+                    fontSize: "13px",
+                    color: "#e2e8f0",
+                    alignItems: "center",
+                }}
+            >
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <img
+                        src={`/greenhouse/crops/${row.id}.png`}
+                        style={{
+                            width: "28px",
+                            height: "28px",
+                            borderRadius: "4px",
+                            backgroundColor: colors.bg,
+                            border: `1px solid ${colors.border}`,
+                        }}
+                    />
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div>{formatCropName(row.id)}</div>
+                        <div style={{ fontSize: "10px", color: colors.border }}>
+                            {row.rarity.charAt(0).toUpperCase() + row.rarity.slice(1)}
+                        </div>
+                    </div>
+                    <div
+                        onClick={toggle}
+                        style={{
+                            cursor: "pointer",
+                            color: "#94a3b8",
+                            transition: "0.2s",
+                            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                        }}
+                    >
+                        ▼
+                    </div>
+                </div>
+
+                <div style={{ textAlign: "right" }}>{row.count}</div>
+                <div style={{ textAlign: "right", fontSize: "11px", color: "#94a3b8" }}>
+                    {/*{dropSummary || "—"}*/}
+                    Fungi Cutter
+                </div>
+                <div style={{ textAlign: "right" }}>
+                    {totalDrops > 0 ? (totalDrops * row.count).toLocaleString() : "—"}
+                </div>
+            </div>
+
+            {isOpen && <SubMenu config={SUBPANEL_CONFIG} drops={row.drops} count={row.count} />}
+        </>
+    );
+}
+
+function renderStaticRow(
     tableId: string,
     row: Row,
     columns: Column[],
@@ -423,14 +738,10 @@ function renderRow(
 ) {
     const isOpen = openRows.has(row.id);
 
-    function getImagePath(tableId: string, rowId: string) {
-        if (tableId === "pests_1") {
-            return `/greenhouse/pests/${rowId}.png`;
-        }
-
-        return `/greenhouse/crops/${rowId}.png`;
-    }
-
+    const getImagePath = (tableId: string, rowId: string) =>
+        tableId === "pests_1"
+            ? `/greenhouse/pests/${rowId}.png`
+            : `/greenhouse/crops/${rowId}.png`;
 
     const toggle = () => {
         setOpenRows(prev => {
@@ -446,6 +757,7 @@ function renderRow(
     return (
         <>
             <div
+                key={row.id}
                 style={{
                     display: "grid",
                     gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
@@ -491,27 +803,12 @@ function renderRow(
                 ))}
             </div>
 
-            {isOpen && <SubMenu config={SUBPANEL_CONFIG} />}
+            {isOpen && <SubMenu config={SUBPANEL_CONFIG} drops={{}} count={0} />}
         </>
     );
 }
 
-const TABLES: TableSchema[] = [
-    {
-        id: "greenhouse_1",
-        category: "GREENHOUSE RATES",
-        headers: [
-            { id: "crop", name: "Crop", align: "left" },
-            { id: "amount", name: "Amount", align: "right" },
-            { id: "drops", name: "Drops", align: "right" },
-            { id: "collection", name: "Collection", align: "right" },
-        ],
-        rows: [
-            { id: "dead_plant", name: "Dead_Plant", fields: ["27", "300", "7,600"] },
-            { id: "wild_rose", name: "Wild_Rose", fields: ["42", "300", "7,600"] },
-            { id: "devourer", name: "Devourer", fields: ["13", "300", "7,600"] },
-        ],
-    },
+const STATIC_TABLES: TableSchema[] = [
     {
         id: "farming_1",
         category: "NORMAL FARMING RATES",
@@ -540,7 +837,14 @@ const TABLES: TableSchema[] = [
     },
 ];
 
-export function RatesPanel() {
+const GREENHOUSE_HEADERS: Column[] = [
+    { id: "crop", name: "Crop", align: "left" },
+    { id: "amount", name: "Amount", align: "right" },
+    { id: "drops", name: "Drops", align: "right" },
+    { id: "collection", name: "Collection", align: "right" },
+];
+
+export function RatesPanel({ greenhouseRows }: RatesPanelProps) {
     const [openTables, setOpenTables] = useState<Set<string>>(new Set());
     const [openRows, setOpenRows] = useState<Set<string>>(new Set());
 
@@ -553,36 +857,60 @@ export function RatesPanel() {
         });
     };
 
-    return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
-            {TABLES.map(table => {
-                const isOpen = openTables.has(table.id);
+    const tableStyle = {
+        width: "100%",
+        backgroundColor: "#1a2332",
+        border: "1px solid #334155",
+        overflow: "hidden",
+        fontFamily: "Arial, sans-serif",
+    };
 
-                return (
+    const headerStyle = {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "2px 12px",
+        cursor: "pointer",
+    };
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={tableStyle}>
+                <div onClick={() => toggleTable("greenhouse_1")} style={headerStyle}>
+                    <div style={{ color: "#e2e8f0", fontSize: "14px" }}>GREENHOUSE RATES</div>
                     <div
-                        key={table.id}
                         style={{
-                            width: "100%",
-                            backgroundColor: "#1a2332",
-                            border: "1px solid #334155",
-                            overflow: "hidden",
-                            fontFamily: "Arial, sans-serif",
+                            color: "#94a3b8",
+                            transform: openTables.has("greenhouse_1") ? "rotate(180deg)" : "rotate(0deg)",
+                            transition: "0.2s",
                         }}
                     >
-                        <div
-                            onClick={() => toggleTable(table.id)}
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                padding: "2px 12px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <div style={{ color: "#e2e8f0", fontSize: "14px" }}>
-                                {table.category}
-                            </div>
+                        ▼
+                    </div>
+                </div>
 
+                {openTables.has("greenhouse_1") && (
+                    <div>
+                        {renderHeader(GREENHOUSE_HEADERS)}
+                        {greenhouseRows.length === 0 ? (
+                            <div style={{ padding: "12px 20px", fontSize: "13px", color: "#475569" }}>
+                                No crops placed in the greenhouse yet.
+                            </div>
+                        ) : (
+                            greenhouseRows.map(row =>
+                                renderGreenhouseRow(row, GREENHOUSE_HEADERS, openRows, setOpenRows)
+                            )
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {STATIC_TABLES.map(table => {
+                const isOpen = openTables.has(table.id);
+                return (
+                    <div key={table.id} style={tableStyle}>
+                        <div onClick={() => toggleTable(table.id)} style={headerStyle}>
+                            <div style={{ color: "#e2e8f0", fontSize: "14px" }}>{table.category}</div>
                             <div
                                 style={{
                                     color: "#94a3b8",
@@ -598,7 +926,7 @@ export function RatesPanel() {
                             <div>
                                 {renderHeader(table.headers)}
                                 {table.rows.map(row =>
-                                    renderRow(table.id, row, table.headers, openRows, setOpenRows)
+                                    renderStaticRow(table.id, row, table.headers, openRows, setOpenRows)
                                 )}
                             </div>
                         )}

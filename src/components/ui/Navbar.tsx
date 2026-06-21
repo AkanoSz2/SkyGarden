@@ -1,31 +1,25 @@
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const tabs = ["Leaderboard", "Profits", "Mutations", "Pests"];
+const tabs = [
+    { label: "Dev", path: "/dev" },
+    { label: "Leaderboard", path: "/leaderboard" },
+    { label: "Profits", path: "/profits" },
+    { label: "Mutations", path: "/mutations" },
+    { label: "Pests", path: "/pests" },
+];
 
 export function Navbar() {
-    const [active, setActive] = useState("Add");
+    const location = useLocation();
+    const navigate = useNavigate();
 
     return (
         <nav className="navbar navbar-expand-lg bg-dark border-bottom border-secondary">
-            <div
-                className="container-fluid"
-                style={{
-                    padding: "0 40px"
-            }}
-            >
-                <a
-                    href="#"
-                    className="navbar-brand d-flex align-items-center"
-                >
+            <div className="container-fluid" style={{ padding: "0 40px" }}>
+                <a href="/" className="navbar-brand d-flex align-items-center">
                     <img
                         src="/favicon.png"
                         alt="logo"
-                        style={{
-                            width: "44px",
-                            height: "44px",
-                            borderRadius: "10px",
-                            objectFit: "cover"
-                        }}
+                        style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
                     />
                 </a>
 
@@ -41,44 +35,33 @@ export function Navbar() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                {/* TABS */}
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto gap-2">
-
                         {tabs.map((tab) => {
-                            const isActive = active === tab;
-
+                            const isActive = location.pathname === tab.path;
                             return (
-                                <li key={tab} className="nav-item">
+                                <li key={tab.label} className="nav-item">
                                     <button
-                                        onClick={() => setActive(tab)}
+                                        onClick={() => navigate(tab.path)}
                                         className="nav-link text-light position-relative"
-                                        style={{
-                                            border: "none",
-                                            background: "transparent",
-                                        }}
+                                        style={{ border: "none", background: "transparent" }}
                                     >
-                                        {tab}
-
-                                        {/* ACTIVE INDICATOR */}
+                                        {tab.label}
                                         {isActive && (
-                                            <span
-                                                style={{
-                                                    position: "absolute",
-                                                    bottom: "0px",
-                                                    left: "10%",
-                                                    width: "80%",
-                                                    height: "3px",
-                                                    backgroundColor: "#22c55e",
-                                                    borderRadius: "4px",
-                                                }}
-                                            />
+                                            <span style={{
+                                                position: "absolute",
+                                                bottom: "0px",
+                                                left: "10%",
+                                                width: "80%",
+                                                height: "3px",
+                                                backgroundColor: "#22c55e",
+                                                borderRadius: "4px",
+                                            }} />
                                         )}
                                     </button>
                                 </li>
                             );
                         })}
-
                     </ul>
                 </div>
             </div>
