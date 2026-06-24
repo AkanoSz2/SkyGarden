@@ -1,4 +1,4 @@
-# Environment Variables
+# <img src="./public/favicon.svg" alt="SkyGarden" width="32" height="32" /> SkyGarden
 
 Create a `.env` file in the project root and add the following variables:
 

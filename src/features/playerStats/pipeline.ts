@@ -1,6 +1,6 @@
 import { getMojangPlayer } from "./services/mojang";
-import { getPlayerProfiles, getProfileGarden, type SkyblockProfile } from "./services/hypixel";
-import type {Item, SkyblockMember, GardenStats} from "./types";
+import { getPlayerProfiles, getProfileGarden } from "./services/hypixel";
+import type {Item, SkyblockMember, GardenStats, SkyblockProfile} from "./types";
 
 import {
     getCurrentArmor,
@@ -73,6 +73,8 @@ export async function JsonMyData(
             if (fi) filteredItems.push(fi);
         }
     }
+
+
 
     const backpacks = await getBackpack(myStats);
     for (const backpack of backpacks) {

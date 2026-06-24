@@ -7,7 +7,7 @@ export function Footer() {
         <div className="container-fluid bg-dark border-top border-secondary text-secondary">
 
             {/* Category headers row */}
-            <div className="d-flex justify-content-center gap-5 px-4 py-3 border-bottom border-secondary">
+            <div className="d-flex justify-content-center gap-5 px-4 py-2 border-bottom border-secondary">
                 <div style={{ width: "160px", textAlign: "center" }}>
                     <p className="text-light fw-bold small mb-0">Legal</p>
                 </div>
@@ -20,7 +20,7 @@ export function Footer() {
             </div>
 
             {/* Links row */}
-            <div className="d-flex justify-content-center gap-5 px-4 py-4">
+            <div className="d-flex justify-content-center gap-5 px-4 py-2">
                 <div style={{ width: "160px", textAlign: "center" }}>
                     <p className="small mb-2" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>Privacy Policy</p>
                     <p className="small mb-2" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>Terms and Conditions</p>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyledDropdown } from "../ui";
-
+import { StyledDropdown } from "../../../components/ui";
 import {
     CropRarityMap,
     initializeCropData,
@@ -8,7 +7,9 @@ import {
     getMutation,
     RarityColors,
     formatCropName
-} from "../shared/CropData";
+}  from "../../../components/shared/CropData";
+
+import {Tab, Tabs } from "react-bootstrap";
 
 type RarityItem = {
     name: string;
@@ -58,7 +59,7 @@ export function InputCropMap({ cells, title, onCropClick, selectedCrop  }: MapGr
                     return (
                         <div
                             key={cell}
-                            className="border rounded hover-effect"
+                            className="border hover-effect"
                             style={{
                                 aspectRatio: "1 / 1",
                                 display: "flex",
@@ -154,7 +155,7 @@ export function InputCrops({
     if (!isLoaded) {
         return (
             <div
-                className="d-flex align-items-center justify-content-center text-white rounded-3"
+                className="d-flex align-items-center justify-content-center text-white"
                 style={{
                     backgroundColor: "#0f172a",
                     height: "100%",
@@ -205,7 +206,7 @@ export function InputCrops({
 
     return (
         <div
-            className="d-flex flex-column border border-[#334155] rounded-3 overflow-hidden"
+            className="d-flex flex-column border border-[#334155] overflow-hidden"
             style={{
                 width: "100%",
                 height: "550px",

@@ -5,9 +5,18 @@ let isInitialized = false;
 export async function loadCropData(): Promise<any> {
     if (cachedData) return cachedData;
 
+    // Node.js (server)
+    if (typeof window === 'undefined') {
+        const { readFileSync } = await import('fs');
+        const { join } = await import('path');
+        const filePath = join(process.cwd(), 'public', 'greenhouse', 'data.json');
+        cachedData = JSON.parse(readFileSync(filePath, 'utf-8'));
+        return cachedData;
+    }
+
+    // Browser (client)
     const response = await fetch('/greenhouse/data.json');
     if (!response.ok) throw new Error(`Failed to load crop data: ${response.statusText}`);
-
     cachedData = await response.json();
     return cachedData;
 }

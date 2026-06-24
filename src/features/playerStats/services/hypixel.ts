@@ -1,11 +1,11 @@
 import type { SkyblockMember, SkyblockProfile } from "../types";
 
-interface ProfilesResponse {
+export interface ProfilesResponse {
     success: boolean;
     profiles: SkyblockProfile[] | null;
 }
 
-async function hypixelFetch<T>(url: string, errLabel: string): Promise<T> {
+export async function hypixelFetch<T>(url: string, errLabel: string): Promise<T> {
     const res = await fetch(url, {
         headers: { "API-Key": process.env.VITE_HYPIXEL_API_KEY ?? "" },
     });
@@ -35,6 +35,7 @@ export async function getPlayerProfiles(uuid: string): Promise<SkyblockProfile[]
         "Hypixel API",
     );
     const raw = profiles ?? [];
+    console.log(raw);
     return raw.map(p => ({
         ...p,
         members: Object.fromEntries(

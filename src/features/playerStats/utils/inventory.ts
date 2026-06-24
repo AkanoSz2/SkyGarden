@@ -108,6 +108,7 @@ export async function filterItem(item: NBTItemTag, myStats: GardenStats): Promis
         // console.warn("Item missing ID:", item);
         return;
     }
+
     const isTalisman = AllowedAccessories.some((p) => itemID.startsWith(p));
     const isArmor =
         !isTalisman &&
@@ -121,6 +122,13 @@ export async function filterItem(item: NBTItemTag, myStats: GardenStats): Promis
     if (!(isArmor || isEquipment || isTool || isAllowedItem || isTalisman))
         return;
 
+
+    // console.log("Checking item:", itemID, {
+    //     isTalisman: AllowedAccessories.some((p) => itemID?.startsWith(p)),
+    //     isArmor: AllowedArmorPrefixes.some((p) => itemID?.startsWith(p)) && AllowedArmorSuffixes.some((s) => itemID?.endsWith(s)),
+    //     isEquipment: AllowedEquipmentPrefixes.some((p) => itemID?.startsWith(p)),
+    //     isTool: AllowedToolsPrefixes.some((p) => itemID?.startsWith(p)),
+    // });
 
 
     const stats = await getItemStats(item, myStats);
@@ -136,7 +144,7 @@ export async function filterItem(item: NBTItemTag, myStats: GardenStats): Promis
             cropName: stats.cropName,
             overbloom: stats.overbloom,
         };
-    if (isArmor)
+    if (isArmor) {
         return {
             type: "armor",
             id: itemID,
@@ -146,6 +154,7 @@ export async function filterItem(item: NBTItemTag, myStats: GardenStats): Promis
             cropName: null,
             overbloom: stats.overbloom,
         };
+    }
     if (isEquipment)
         return {
             type: "equipment",

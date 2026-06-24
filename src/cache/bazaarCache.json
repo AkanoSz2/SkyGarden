@@ -1,0 +1,350 @@
+{
+  "data": {
+    "DO_NOT_EAT_SHROOM": {
+      "productId": "DO_NOT_EAT_SHROOM",
+      "buyPrice": 4696.2,
+      "sellPrice": 674.5
+    },
+    "ENCHANTED_BROWN_MUSHROOM": {
+      "productId": "ENCHANTED_BROWN_MUSHROOM",
+      "buyPrice": 1741.449571821526,
+      "sellPrice": 1580
+    },
+    "CREAMBLOOM": {
+      "productId": "CREAMBLOOM",
+      "buyPrice": 229627.62186335406,
+      "sellPrice": 55569.42484186315
+    },
+    "SNOOZLING": {
+      "productId": "SNOOZLING",
+      "buyPrice": 2888197.7000000007,
+      "sellPrice": 2062000.503030303
+    },
+    "ENCHANTED_HAY_BALE": {
+      "productId": "ENCHANTED_HAY_BALE",
+      "buyPrice": 152555.93596059113,
+      "sellPrice": 150546.5
+    },
+    "ENCHANTED_CACTUS": {
+      "productId": "ENCHANTED_CACTUS",
+      "buyPrice": 103419.5,
+      "sellPrice": 100439.3
+    },
+    "POLISHED_PUMPKIN": {
+      "productId": "POLISHED_PUMPKIN",
+      "buyPrice": 254756.79150000002,
+      "sellPrice": 251782.43793716657
+    },
+    "BLASTBERRY": {
+      "productId": "BLASTBERRY",
+      "buyPrice": 899998.4980066445,
+      "sellPrice": 471314.23333333334
+    },
+    "CINDERSHADE": {
+      "productId": "CINDERSHADE",
+      "buyPrice": 209092.70000000004,
+      "sellPrice": 161700.2
+    },
+    "ALL_IN_ALOE": {
+      "productId": "ALL_IN_ALOE",
+      "buyPrice": 18329.860546875,
+      "sellPrice": 4058.6499999999996
+    },
+    "CHOCOBERRY": {
+      "productId": "CHOCOBERRY",
+      "buyPrice": 178999.1,
+      "sellPrice": 147438.60337837838
+    },
+    "STARTLEVINE": {
+      "productId": "STARTLEVINE",
+      "buyPrice": 972811.4,
+      "sellPrice": 739739.9
+    },
+    "TIMESTALK": {
+      "productId": "TIMESTALK",
+      "buyPrice": 416198.1,
+      "sellPrice": 33411.397670405524
+    },
+    "ENCHANTED_PUMPKIN": {
+      "productId": "ENCHANTED_PUMPKIN",
+      "buyPrice": 1700.5254262609196,
+      "sellPrice": 1600.0080225445968
+    },
+    "MAGIC_JELLYBEAN": {
+      "productId": "MAGIC_JELLYBEAN",
+      "buyPrice": 1420.950311850312,
+      "sellPrice": 1111
+    },
+    "BROWN_MUSHROOM": {
+      "productId": "BROWN_MUSHROOM",
+      "buyPrice": 12.524887619460813,
+      "sellPrice": 6.573839409707698
+    },
+    "CACTUS": {
+      "productId": "CACTUS",
+      "buyPrice": 8.478688152960304,
+      "sellPrice": 1.9
+    },
+    "RED_MUSHROOM": {
+      "productId": "RED_MUSHROOM",
+      "buyPrice": 15.5,
+      "sellPrice": 6.608282009968528
+    },
+    "MELON": {
+      "productId": "MELON",
+      "buyPrice": 2.6021911830523647,
+      "sellPrice": 0.6416991693457577
+    },
+    "VEILSHROOM": {
+      "productId": "VEILSHROOM",
+      "buyPrice": 997.2942058975685,
+      "sellPrice": 471.08276214336104
+    },
+    "TURTLELLINI": {
+      "productId": "TURTLELLINI",
+      "buyPrice": 167288.47763157895,
+      "sellPrice": 112031.2
+    },
+    "DEAD_PLANT": {
+      "productId": "DEAD_PLANT",
+      "buyPrice": 1485.4,
+      "sellPrice": 513.3298491211698
+    },
+    "ENCHANTED_GOLDEN_CARROT": {
+      "productId": "ENCHANTED_GOLDEN_CARROT",
+      "buyPrice": 78232.9999562746,
+      "sellPrice": 76587.25028653294
+    },
+    "ENCHANTED_SUNFLOWER": {
+      "productId": "ENCHANTED_SUNFLOWER",
+      "buyPrice": 648.4411144646693,
+      "sellPrice": 615.9
+    },
+    "SHADEVINE": {
+      "productId": "SHADEVINE",
+      "buyPrice": 1360.252286585366,
+      "sellPrice": 300
+    },
+    "ENCHANTED_SUGAR_CANE": {
+      "productId": "ENCHANTED_SUGAR_CANE",
+      "buyPrice": 106240.42783443311,
+      "sellPrice": 104001.3
+    },
+    "PHANTOMLEAF": {
+      "productId": "PHANTOMLEAF",
+      "buyPrice": 17104.992038600725,
+      "sellPrice": 1180.6
+    },
+    "ZOMBUD": {
+      "productId": "ZOMBUD",
+      "buyPrice": 9278.07407854985,
+      "sellPrice": 955.5697495961228
+    },
+    "STOPLIGHT_PETAL": {
+      "productId": "STOPLIGHT_PETAL",
+      "buyPrice": 2825363.8903225805,
+      "sellPrice": 1732265
+    },
+    "THORNSHADE": {
+      "productId": "THORNSHADE",
+      "buyPrice": 98644.3,
+      "sellPrice": 48232.924007936504
+    },
+    "ENCHANTED_BAKED_POTATO": {
+      "productId": "ENCHANTED_BAKED_POTATO",
+      "buyPrice": 76884.43802423113,
+      "sellPrice": 74959.23615717376
+    },
+    "ENCHANTED_RED_MUSHROOM": {
+      "productId": "ENCHANTED_RED_MUSHROOM",
+      "buyPrice": 1626.9902468248263,
+      "sellPrice": 1580.0254408041862
+    },
+    "WHEAT": {
+      "productId": "WHEAT",
+      "buyPrice": 7.130758185261239,
+      "sellPrice": 4.010608398406874
+    },
+    "THUNDERLING": {
+      "productId": "THUNDERLING",
+      "buyPrice": 255131.1,
+      "sellPrice": 17366.16911499097
+    },
+    "DUSKBLOOM": {
+      "productId": "DUSKBLOOM",
+      "buyPrice": 212998.15049504954,
+      "sellPrice": 115610.7
+    },
+    "ENCHANTED_COOKIE": {
+      "productId": "ENCHANTED_COOKIE",
+      "buyPrice": 77056.5868501529,
+      "sellPrice": 74604.7
+    },
+    "FERMENTO": {
+      "productId": "FERMENTO",
+      "buyPrice": 251940.69666666666,
+      "sellPrice": 245532
+    },
+    "ENCHANTED_WILD_ROSE": {
+      "productId": "ENCHANTED_WILD_ROSE",
+      "buyPrice": 642.8743201179161,
+      "sellPrice": 620.0103685741998
+    },
+    "CHEESEBITE": {
+      "productId": "CHEESEBITE",
+      "buyPrice": 474224.9000000001,
+      "sellPrice": 390500.0999999999
+    },
+    "ENCHANTED_CARROT": {
+      "productId": "ENCHANTED_CARROT",
+      "buyPrice": 507.45634242485505,
+      "sellPrice": 456.84550847780866
+    },
+    "WITHERBLOOM": {
+      "productId": "WITHERBLOOM",
+      "buyPrice": 2797.148490945674,
+      "sellPrice": 128.6
+    },
+    "ENCHANTED_MELON": {
+      "productId": "ENCHANTED_MELON",
+      "buyPrice": 328.0504876425676,
+      "sellPrice": 304.85987489302255
+    },
+    "WILD_ROSE": {
+      "productId": "WILD_ROSE",
+      "buyPrice": 9.236791910815155,
+      "sellPrice": 0.7
+    },
+    "GLOOMGOURD": {
+      "productId": "GLOOMGOURD",
+      "buyPrice": 1121.1,
+      "sellPrice": 720
+    },
+    "SUGAR_CANE": {
+      "productId": "SUGAR_CANE",
+      "buyPrice": 14.679254090648026,
+      "sellPrice": 2.1756110231844485
+    },
+    "ENCHANTED_SUGAR": {
+      "productId": "ENCHANTED_SUGAR",
+      "buyPrice": 712.2116536464093,
+      "sellPrice": 639.0960406858471
+    },
+    "PLANTBOY_ADVANCE": {
+      "productId": "PLANTBOY_ADVANCE",
+      "buyPrice": 2082987.1,
+      "sellPrice": 1141067.913846154
+    },
+    "GODSEED": {
+      "productId": "GODSEED",
+      "buyPrice": 307767.29130434786,
+      "sellPrice": 55002.7
+    },
+    "CHOCONUT": {
+      "productId": "CHOCONUT",
+      "buyPrice": 2191.4466297322256,
+      "sellPrice": 567.5816911887995
+    },
+    "ASHWREATH": {
+      "productId": "ASHWREATH",
+      "buyPrice": 723.5691731881592,
+      "sellPrice": 600.1
+    },
+    "DEVOURER": {
+      "productId": "DEVOURER",
+      "buyPrice": 1264998.4666666666,
+      "sellPrice": 1908.6697339323216
+    },
+    "SCOURROOT": {
+      "productId": "SCOURROOT",
+      "buyPrice": 1418.3280087527353,
+      "sellPrice": 101.5
+    },
+    "ENCHANTED_MOONFLOWER": {
+      "productId": "ENCHANTED_MOONFLOWER",
+      "buyPrice": 722.255751916758,
+      "sellPrice": 661.6071887391704
+    },
+    "PUFFERCLOUD": {
+      "productId": "PUFFERCLOUD",
+      "buyPrice": 756213.4707317073,
+      "sellPrice": 600001.0024539877
+    },
+    "LONELILY": {
+      "productId": "LONELILY",
+      "buyPrice": 3349.9235023041474,
+      "sellPrice": 1056.0892900788801
+    },
+    "SOGGYBUD": {
+      "productId": "SOGGYBUD",
+      "buyPrice": 2995.9000000000005,
+      "sellPrice": 222.53354018516035
+    },
+    "COALROOT": {
+      "productId": "COALROOT",
+      "buyPrice": 189189.2525,
+      "sellPrice": 142214.6
+    },
+    "ENCHANTED_WHEAT": {
+      "productId": "ENCHANTED_WHEAT",
+      "buyPrice": 959.9890267399784,
+      "sellPrice": 916.7704848314302
+    },
+    "DUSTGRAIN": {
+      "productId": "DUSTGRAIN",
+      "buyPrice": 1272.79367219917,
+      "sellPrice": 720.022074360473
+    },
+    "FLESHTRAP": {
+      "productId": "FLESHTRAP",
+      "buyPrice": 9215.06425061425,
+      "sellPrice": 442.30000000000007
+    },
+    "ENCHANTED_POTATO": {
+      "productId": "ENCHANTED_POTATO",
+      "buyPrice": 488.15271545043475,
+      "sellPrice": 458.0734588989021
+    },
+    "PUMPKIN": {
+      "productId": "PUMPKIN",
+      "buyPrice": 14,
+      "sellPrice": 7.385309694624949
+    },
+    "ENCHANTED_CACTUS_GREEN": {
+      "productId": "ENCHANTED_CACTUS_GREEN",
+      "buyPrice": 660.2404024203867,
+      "sellPrice": 613.8854181834729
+    },
+    "NOCTILUME": {
+      "productId": "NOCTILUME",
+      "buyPrice": 847608.2,
+      "sellPrice": 704378.3
+    },
+    "CHORUS_FRUIT": {
+      "productId": "CHORUS_FRUIT",
+      "buyPrice": 299996.8,
+      "sellPrice": 157506.3526717557
+    },
+    "MOONFLOWER": {
+      "productId": "MOONFLOWER",
+      "buyPrice": 5.722333493168269,
+      "sellPrice": 2
+    },
+    "CHLORONITE": {
+      "productId": "CHLORONITE",
+      "buyPrice": 273177.4,
+      "sellPrice": 89245.1132041071
+    },
+    "SHELLFRUIT": {
+      "productId": "SHELLFRUIT",
+      "buyPrice": 5245.5179056237885,
+      "sellPrice": 2500.2648546739983
+    },
+    "GLASSCORN": {
+      "productId": "GLASSCORN",
+      "buyPrice": 698587.6799999999,
+      "sellPrice": 318.52083159852333
+    }
+  },
+  "timestamp": 1782282444249
+}
