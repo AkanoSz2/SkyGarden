@@ -30,7 +30,7 @@ export const AllowedToolsPrefixes = [
     "PUMPKIN_DICER",
     "MELON_DICER",
     "CACTUS_KNIFE",
-    "COCOA_CHOPPER",
+    "COCO_CHOPPER",
     "FUNGI_CUTTER",
 ];
 
@@ -48,6 +48,7 @@ export const ToolIDCropMap: Record<string, string> = {
     CACTUS_KNIFE:              "Cactus",
     COCOA_CHOPPER:             "Cocoa_Beans",
     FUNGI_CUTTER:              "Mushroom",
+    COCO_CHOPPER:             "Cocoa_Beans",
 };
 
 export const TurboEnchantMap: Record<string, string> = {

@@ -65,6 +65,8 @@ export interface SkyblockMember {
         backpack_contents: Record<string, { data: string } | undefined>;
         [key: string]: unknown;
     };
+    loadout: { data: string };
+
     SKILL_FARMING: number;
     leveling?: {
         completed_tasks?: string[];

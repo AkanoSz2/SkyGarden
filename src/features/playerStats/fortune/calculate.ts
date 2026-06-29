@@ -97,6 +97,7 @@ export async function getTotalFortune(
     },
     cropUpgrades: Record<string, { level: number; fortune: number }>,
     personalBests: Record<string, number>,
+    personalBestsRaw: Record<string, number>,
 ): Promise<FortuneResult> {
     const levelFortune = farmingLevel * presetData.farmingLevel;
     const hyperchargedItems = applyHypercharge(items, chipStats.hypercharge);
@@ -171,6 +172,7 @@ export async function getTotalFortune(
             finalFortune: number,
             totalCropFortune: number,
             actualCropFortune: number,
+            personalBestCollection: number,
             baseFortune: number
             sources: Record<string, number>;
             extraCropFortune?: Record<string, number>;
@@ -195,6 +197,7 @@ export async function getTotalFortune(
                 ? presetData.carrolynFortune
                 : 0;
             const personalBestFortune = personalBests[tool.cropName] ?? 0;
+            const personalBestCollection = personalBestsRaw[tool.cropName] ?? 0;
 
 
             const totalCropFortune = toolCropFortune + cropUpgrade + carrolynFortune + personalBestFortune + dedicationFortune;
@@ -206,8 +209,9 @@ export async function getTotalFortune(
             cropFortune[tool.cropName] = {
                 finalFortune: (totalContest + tempFortune.total),
                 baseFortune: totalContest,
-                actualCropFortune: actualCropFortune,
-                totalCropFortune: totalCropFortune,
+                actualCropFortune: Math.trunc(actualCropFortune),
+                totalCropFortune: Math.trunc(totalCropFortune),
+                personalBestCollection: personalBestCollection,
                 sources: {
                     base: baseFortune,
                     baseTemp: tempFortune.total,

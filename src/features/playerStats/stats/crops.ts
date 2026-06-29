@@ -78,6 +78,7 @@ export function getPersonalBests(myStats: SkyblockMember): Record<string, number
     const unlocked = myStats.jacobs_contest?.perks?.personal_bests ?? 0;
     const personalBests: Record<string, number> = myStats.personal_bests ?? {};
     const result: Record<string, number> = {};
+    const resultRaw: Record<string, number> = {};
 
     if (!unlocked) return result;
 
@@ -88,7 +89,7 @@ export function getPersonalBests(myStats: SkyblockMember): Record<string, number
         if (!cropName) continue;
         result[cropName] =
             Math.round(Math.min((best / max) * 100, 100) * 100) / 100;
-    }
+        resultRaw[cropName] = Number((best / 1000 / 1000).toFixed(2));    }
 
-    return result;
+    return [result, resultRaw];
 }
