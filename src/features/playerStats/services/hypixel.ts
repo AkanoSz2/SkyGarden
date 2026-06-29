@@ -9,6 +9,7 @@ export async function hypixelFetch<T>(url: string, errLabel: string): Promise<T>
     const res = await fetch(url, {
         headers: { "API-Key": process.env.VITE_HYPIXEL_API_KEY ?? "" },
     });
+    console.log(res)
     if (!res.ok) throw new Error(`${errLabel} error: ${res.status}`);
     return res.json() as Promise<T>;
 }
@@ -26,6 +27,7 @@ function parseMember(raw: Record<string, unknown>): SkyblockMember {
         attributes: raw.attributes as SkyblockMember["attributes"],
         pets_data: raw.pets_data as SkyblockMember["pets_data"],
         pets: raw.pets as SkyblockMember["pets"],
+        loadout: raw.loadout as SkyblockMember["loadout"],
     };
 }
 
@@ -35,7 +37,6 @@ export async function getPlayerProfiles(uuid: string): Promise<SkyblockProfile[]
         "Hypixel API",
     );
     const raw = profiles ?? [];
-    console.log(raw);
     return raw.map(p => ({
         ...p,
         members: Object.fromEntries(

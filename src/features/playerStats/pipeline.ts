@@ -2,8 +2,13 @@ import { getMojangPlayer } from "./services/mojang";
 import { getPlayerProfiles, getProfileGarden } from "./services/hypixel";
 import type {Item, SkyblockMember, GardenStats, SkyblockProfile} from "./types";
 
+// self note, add actual fortune calculator
+
 import {
     getCurrentArmor,
+    getWardrobe,
+    getBestArmorType,
+
     getCurrentEquipment,
     getAccessories,
     getBackpack,
@@ -55,8 +60,9 @@ export async function JsonMyData(
     const growthUpgrade = getGrowthUpgrade(gardenStats);
     const deskYieldUpgrade = getDeskYieldUpgrade(gardenStats);
 
+    const armor = await getBestArmorType(myStats, gardenStats);
+
     const singleItems = [
-        await getCurrentArmor(myStats),
         await getCurrentEquipment(myStats),
         await getEnderChest(myStats),
         await getInventory(myStats),
@@ -70,11 +76,16 @@ export async function JsonMyData(
         for (const slot of decoded.value.i.value.value) {
             if (!slot.tag) continue;
             const fi = await filterItem(slot.tag.value, gardenStats);
-            if (fi) filteredItems.push(fi);
+            if (fi) {
+                if (fi.id === "THEORETICAL_HOE_SUNFLOWER_3") {
+                    filteredItems.push(fi);
+                    filteredItems.push({...fi, id: "THEORETICAL_HOE_MOONFLOWER_3", cropName: "Moonflower"});
+                } else {
+                    filteredItems.push(fi);
+                }
+            }
         }
     }
-
-
 
     const backpacks = await getBackpack(myStats);
     for (const backpack of backpacks) {
@@ -82,9 +93,17 @@ export async function JsonMyData(
         for (const slot of decoded.value.i.value.value) {
             if (!slot.tag) continue;
             const fi = await filterItem(slot.tag.value, gardenStats);
-            if (fi) filteredItems.push(fi);
+            if (fi) {
+                if (fi.id === "THEORETICAL_HOE_SUNFLOWER_3") {
+                    filteredItems.push(fi);
+                    filteredItems.push({ ...fi, id: "THEORETICAL_HOE_MOONFLOWER_3", cropName: "Moonflower" });
+                } else {
+                    filteredItems.push(fi);
+                }
+            }
         }
     }
+    filteredItems.push(...armor.items);
 
 
     // pick Zorros vs Blossom/Lotus cloak — keep whichever has higher stats
@@ -109,6 +128,10 @@ export async function JsonMyData(
         );
     }
 
+    for(const item of finalItems) {
+        console.log(`Item: ${item.name}, Fortune: ${item.fortune}, CropFortune: ${item.cropFortune}, CropName: ${item.cropName}, Overbloom: ${item.overbloom}`);
+    }
+
     const farmingLevel = await getFarmingLevel(myStats);
     const gardenLevel = await getGardenLevel(gardenStats);
     const chipStats = getGardenChips(myStats);
@@ -118,7 +141,7 @@ export async function JsonMyData(
     const cropMilestones = await getMilestones(gardenStats);
     const cropUpgrades = getCropUpgrades(gardenStats);
     const permanentFortune = await populatePermanentFortune(myStats, gardenStats);
-    const personalBests = await getPersonalBests(myStats);
+    const [personalBests, personalBestsRaw] = await getPersonalBests(myStats);
 
     const hyperchargedItems = applyHypercharge(finalItems, chipStats.hypercharge);
 
@@ -133,6 +156,7 @@ export async function JsonMyData(
         cropMilestones,
         cropUpgrades,
         personalBests,
+        personalBestsRaw,
     );
 
     const groupedItems = {
@@ -181,13 +205,13 @@ export async function JsonMyData(
     const outputData = {
         player: { uuid, profile: profile.cute_name },
         fortune: {
+            breakthrough: { ...fortuneResults },
             stats: { farmingLevel, gardenLevel, chipStats, shards, pets, items: groupedItems },
             garden: { exportedCrops, cropMilestones, cropUpgrades, permanentFortune },
-            breakthrough: { ...fortuneResults },
         },
         greenhouse: { deskYieldUpgrade, growthUpgrade },
     };
 
-    console.log(`Processed data for player ${uuid} on profile ${profile.cute_name}`);
+    // console.log(`Processed data for player ${uuid} on profile ${profile.cute_name}`);
     return outputData;
 }

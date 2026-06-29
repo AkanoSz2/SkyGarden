@@ -90,3 +90,9 @@ export function getMutation(id: Mutation) {
     if (!cachedData) throw new Error("Crop data not loaded yet. Call initializeCropData() first.");
     return cachedData.mutations[id];
 }
+
+
+export async function getEffects(){
+    const response = await fetch('/greenhouse/data.json');
+    console.log(response["effects"])
+}

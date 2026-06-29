@@ -10,7 +10,11 @@ import {
     ToolIDCropMap,
     TurboEnchantMap
 } from "../data/itemData.ts";
+
 import type {GardenStats, Item, NBTItemTag, SkyblockMember} from "../types.ts";
+
+import { decodeNBT} from "./decode.ts";
+
 
 
 function getGreenthumbFortune(
@@ -24,6 +28,10 @@ function getGreenthumbFortune(
 
 export async function getCurrentArmor(myStats: SkyblockMember) {
     return myStats.inventory.inv_armor.data;
+}
+
+export async function getWardrobe(myStats: SkyblockMember) {
+    return myStats.loadout.armor
 }
 export async function getCurrentEquipment(myStats: SkyblockMember) {
     return myStats.inventory.equipment_contents.data;
@@ -51,6 +59,66 @@ export async function getBackpack(myStats: SkyblockMember) {
     return backpacks;
 }
 
+export async function getBestArmorType(myStats: SkyblockMember, gardenStats: GardenStats) {
+
+    const currentArmor = await getCurrentArmor(myStats);
+    const wardrobe = await getWardrobe(myStats);
+
+    const armorTypes = ["HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"];
+
+    const equippedItems: Record<string, Item> = {};
+    const decodedCurrent = await decodeNBT(currentArmor);
+
+    for (const armorType of armorTypes) {
+        const currentArmorItem = decodedCurrent.value.i.value.value.find(slot =>
+            slot.tag?.value.ExtraAttributes?.value?.id?.value?.endsWith(armorType)
+        );
+        if (currentArmorItem?.tag) {
+            const fi = await filterItem(currentArmorItem.tag.value, gardenStats);
+            if (fi) {
+                equippedItems[armorType] = fi;
+            }
+        }
+    }
+
+    const equippedTotal = Object.values(equippedItems).reduce((sum, i) => sum + i.fortune, 0);
+
+    let bestSlotKey: string | null = null;
+    let bestSlotItems: Record<string, Item> = {};
+    let maxFortune = 0;
+
+    for (const wdSlotKey of Object.keys(wardrobe)) {
+        const wdSlot = wardrobe[wdSlotKey];
+
+        let slotFortune = 0;
+        const slotItems: Record<string, Item> = {};
+
+        for (const armorType of armorTypes) {
+            const wdItem = wdSlot[armorType];
+            if (!wdItem) continue;
+
+            const decoded = await decodeNBT(wdItem.data);
+            const decodedItem = decoded.value.i.value.value[0].tag.value;
+            const fi = await filterItem(decodedItem, gardenStats);
+
+            if (!fi) continue;
+
+            slotFortune += fi.fortune;
+            slotItems[armorType] = fi;
+        }
+
+        if (slotFortune > maxFortune) {
+            maxFortune = slotFortune;
+            bestSlotKey = wdSlotKey;
+            bestSlotItems = slotItems;
+        }
+    }
+
+    const winner = maxFortune > equippedTotal ? "wardrobe" : "equipped armor";
+    const bestItems = winner === "wardrobe" ? bestSlotItems : equippedItems;
+
+    return { items: Object.values(bestItems) };
+}
 
 
 function getItemStats(item: NBTItemTag, myStats: GardenStats) {
@@ -92,11 +160,11 @@ function getItemStats(item: NBTItemTag, myStats: GardenStats) {
             continue;
         }
 
-        if (ench === "green_thumb") {
+        if (ench === "green_thumb" && itemID?.includes("BLOSSOM")) {
             const greenThumbLevel = EnchantsFortune[ench]?.[ench_level - 1];
+            // console.log(getGreenthumbFortune(myStats, greenThumbLevel, 1))
             fortune +=  getGreenthumbFortune(myStats, greenThumbLevel, 1)
         }
-
     }
 
     return { fortune, overbloom, cropFortune, cropName, extraCropFortune };
@@ -114,9 +182,9 @@ export async function filterItem(item: NBTItemTag, myStats: GardenStats): Promis
         !isTalisman &&
         AllowedArmorPrefixes.some((p) => itemID.startsWith(p)) &&
         AllowedArmorSuffixes.some((s) => itemID.endsWith(s));
-    const isEquipment =
-        !isTalisman && AllowedEquipmentPrefixes.some((p) => itemID.startsWith(p));
+    const isEquipment = !isTalisman && AllowedEquipmentPrefixes.some((p) => itemID.startsWith(p));
     const isTool = AllowedToolsPrefixes.some((p) => itemID.startsWith(p));
+
     const isAllowedItem = AllowedItemPrefixes.some((p) => itemID.startsWith(p));
 
     if (!(isArmor || isEquipment || isTool || isAllowedItem || isTalisman))

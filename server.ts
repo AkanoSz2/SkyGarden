@@ -8,7 +8,9 @@ import { getBazaarPrice } from './src/features/itemPrices';
 import { readCache, writeCache, isCacheFresh } from './src/cache/cache';
 
 const PLAYER_CACHE_FILE = './src/cache/playerCache.json';
-const PLAYER_CACHE_TTL = 1000 ; // 5 minutes
+// const PLAYER_CACHE_TTL = 1000 * 60 * 5 ; // 5 minutes
+const PLAYER_CACHE_TTL = 1000; // 1s dev mode
+
 
 const BAZAAR_CACHE_FILE = './src/cache/bazaarCache.json';
 const BAZAAR_CACHE_TTL = 1000 * 60 * 60; // 1 hour
@@ -22,6 +24,7 @@ const getCachedPlayer = (key: string) => {
 };
 
 const cachePlayer = (key: string, data: any) => {
+    // console.log(data)
     const cache = readCache<Record<string, any>>(PLAYER_CACHE_FILE)?.data ?? {};
     cache[key] = { data, timestamp: Date.now() };
     writeCache(PLAYER_CACHE_FILE, cache);
@@ -90,6 +93,7 @@ app.get('/player/:name/:profile.json', async (c) => {
     }
 });
 
+
 async function onLoad() {
     console.log("Server initializing...");
     if (isCacheFresh(BAZAAR_CACHE_FILE, BAZAAR_CACHE_TTL)) {
@@ -100,7 +104,13 @@ async function onLoad() {
     setInterval(refreshBazaarCache, BAZAAR_CACHE_TTL);
 }
 
-onLoad().then(() => {
-    serve({ fetch: app.fetch, port: 3001 });
-    console.log('Server running on http://localhost:3001');
-});
+onLoad()
+    .then(() => {
+        serve({ fetch: app.fetch, port: 3001 });
+        console.log('Server running on http://localhost:3001');
+    })
+    .catch((e) => {
+        console.error('Startup encountered an error, starting server regardless:', e);
+        serve({ fetch: app.fetch, port: 3001 });
+        console.log('Server running on http://localhost:3001 (degraded startup)');
+    });
