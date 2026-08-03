@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const tabs = [
     // { label: "Dev", path: "/dev" },
-    { label: "Leaderboard", path: "/leaderboard" },
     { label: "Profits", path: "/profits" },
     { label: "Mutations", path: "/mutations" },
     { label: "GH", path: "/gh" },

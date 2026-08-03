@@ -1,4 +1,3 @@
-
 let cachedData: any = null;
 let isInitialized = false;
 
@@ -9,13 +8,13 @@ export async function loadCropData(): Promise<any> {
     if (typeof window === 'undefined') {
         const { readFileSync } = await import('fs');
         const { join } = await import('path');
-        const filePath = join(process.cwd(), 'public', 'greenhouse', 'data.json');
+        const filePath = join(process.cwd(), 'public', 'greenhouse', 'data', 'data.json');
         cachedData = JSON.parse(readFileSync(filePath, 'utf-8'));
         return cachedData;
     }
 
     // Browser (client)
-    const response = await fetch('/greenhouse/data.json');
+    const response = await fetch('/greenhouse/data/data.json');
     if (!response.ok) throw new Error(`Failed to load crop data: ${response.statusText}`);
     cachedData = await response.json();
     return cachedData;
@@ -42,7 +41,7 @@ export const CropRarityMap: Record<Rarity, string[]> = {
 };
 
 export const RarityColors: Record<Rarity, { border: string; text: string; bg: string }> = {
-    crops:     { border: "#6c757d", text: "#ffffff", bg: "#343a40" },
+    crops:     { border: "#e2e8f0", text: "#ffffff", bg: "#343a40" },
     common:    { border: "#28a745", text: "#ffffff", bg: "#1e3a2f" },
     uncommon:  { border: "#17a2b8", text: "#ffffff", bg: "#1e3a40" },
     rare:      { border: "#0d6efd", text: "#ffffff", bg: "#1e2a4d" },
@@ -93,6 +92,6 @@ export function getMutation(id: Mutation) {
 
 
 export async function getEffects(){
-    const response = await fetch('/greenhouse/data.json');
+    const response = await fetch('/greenhouse/data/data.json');
     console.log(response["effects"])
 }

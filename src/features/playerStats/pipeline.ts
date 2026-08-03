@@ -2,7 +2,7 @@ import { getMojangPlayer } from "./services/mojang";
 import { getPlayerProfiles, getProfileGarden } from "./services/hypixel";
 import type {Item, SkyblockMember, GardenStats, SkyblockProfile} from "./types";
 
-// self note, add actual fortune calculator
+// TODO add fortune calculator
 
 import {
     getCurrentArmor,

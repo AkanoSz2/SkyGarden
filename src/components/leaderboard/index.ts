@@ -1,1 +1,0 @@
-export { RatesPanel } from "./RatesPanel";

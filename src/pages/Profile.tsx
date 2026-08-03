@@ -6,7 +6,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
 import { usePlayerDataContext } from "../context/PlayerDataContext";
-import {string} from "prismarine-nbt";
+
 
 const cropRows = Array.from({ length: 13 }, (_, row) => ({
     id: row + 1,
@@ -64,7 +64,7 @@ function InfoBadge({ label, value, icon }: { label: string; value: string | numb
 }
 
 function HoeIcon() {
-    return <img src="/temp/minecraftHoe.png" alt="Hoe" style={{ width: "36px", height: "36px", objectFit: "contain" }} />;
+    return <img src="src/assets/minecraftHoe.png" alt="Hoe" style={{ width: "36px", height: "36px", objectFit: "contain" }} />;
 }
 
 function YesNoSelect({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
@@ -142,7 +142,7 @@ function Sidebar({ username }: { username?: string }) {
                 width: "180px",
                 minHeight: "280px",
                 flexShrink: 0,
-                backgroundImage: "url(/temp/profileBackground.jpg)",
+                backgroundImage: "url(src/assets/profileBackground.png)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -393,7 +393,6 @@ function Fortune() {
     const TEMP = fortuneEntry.temporary.sources;
 
     const greenhouseEntry = playerData?.greenhouse;
-    console.log("Greenhouse Entry:", greenhouseEntry);
 
     const activeTempTotal = Object.entries(TEMP)
         .filter(([key]) => activeBonuses[key] ?? true)

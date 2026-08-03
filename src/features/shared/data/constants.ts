@@ -54,3 +54,4 @@ export const RECOMMENDED_TOOLS: Record<string, keyof typeof PLANT_TOOLS> = {
     timestalk: "turing_sugar_cane_hoe",
     godseed: "eclipse_hoe",
 };
+

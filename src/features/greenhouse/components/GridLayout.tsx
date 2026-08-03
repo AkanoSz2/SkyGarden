@@ -1,118 +1,162 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
-type GreenhouseLayoutProps = {
-    cells: string[];
-    setCells: React.Dispatch<React.SetStateAction<string[]>>;
-};
+import type {
+    GreenhouseLayoutProps,
+} from "../types.ts";
 
-type TabButtonProps = {
-    tabKey: string;
-    active: string;
-    setActive: (key: string) => void;
-};
+import {
+    emptyGrid,
+} from "../scripts/placement.ts";
 
-
-type GridDataCells = {
-    ingredients: string[];
-    targets: string[]
-}
-
-type TabGridData = {
-    id : string;
-    cells: GridDataCells
-}
+import {
+    addTab,
+    deleteTab,
+    printCropMap
+} from "../scripts/tabs.ts";
 
 
-function TabButton({ tabKey, active, setActive }: TabButtonProps) {
-    const isActive = active === tabKey;
-    return (
-        <button
-            onClick={() => setActive(tabKey)}
-            className={`btn btn-sm rounded-top-3 rounded-bottom-0 border-bottom-0 px-3 py-2 ${
-                isActive ? "border border-secondary-subtle text-light" : "border border-secondary text-secondary"
-            }`}
-            style={{
-                fontSize: "13px",
-                backgroundColor: isActive ? "#0f172a" : "#0a0f1a",
-                position: "relative",
-                bottom: 0,
-                transition: "all 0.1s ease",
-            }}
-        >
-            {tabKey}
-        </button>
-    );
-}
+import {TabButton, AddTabButton} from "./TabButton.tsx";
 
-function AddTabButton({ onClick }: { onClick: () => void }) {
-    return (
-        <button
-            className="btn btn-sm btn-link text-secondary align-self-center ms-1 fs-5 text-decoration-none"
-            onClick={onClick}
-        >
-            +
-        </button>
-    );
-}
+import {GreenhouseGrid} from "./GreenhouseGrid.tsx";
+import {Legend} from "./Legend.tsx";
 
-function GreenhousGrid({ cells, setCells }: GreenhouseLayoutProps) {
-    const gridCells = Array.from({ length: 100 }, (_, i) => cells[i] || "empty");
-
-    return (
-        <div className="border-0" style={{ backgroundColor: "#0f172a" }}>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(10, 1fr)",
-                    gap: "2px",
-                    padding: "12px",
-                }}
-            >
-                {gridCells.map((cell, index) => {
-                    const isEmpty = cell === "empty";
-                    return (
-                        <div key={index} className="ratio ratio-1x1">
-                            <div
-                                className="border rounded overflow-hidden d-flex align-items-center justify-content-center p-1"
-                                style={{
-                                    borderColor: isEmpty ? "#475569" : "#334155",
-                                    backgroundColor: isEmpty ? "#1e2937" : "#0f172a",
-                                }}
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-}
-export function GreenhouseLayout({ cells, setCells }: GreenhouseLayoutProps) {
-    const [tabs, setTabs] = useState(["1"]);
+export function GreenhouseLayout({
+                                     selectedCrop,
+                                     hoveredIndex,
+                                     setHoveredIndex,
+                                     selectedType,
+                                     clearGrid,
+                                     setClearGrid,
+                                     clearGridType,
+                                     generateTrigger,
+                                     setGenerateTrigger,
+                                     generatorItems,
+                                     setGeneratorItems,
+                                     greenhouseTabData,
+                                     setGreenhouseTabData,
+                                 }: Omit<GreenhouseLayoutProps, "cells" | "setCells" | "activeTab">) {
+    const [tabs, setTabs] = useState<string[]>(["1"]);
     const [active, setActive] = useState("1");
     const maxTabs = 5;
 
-    const addTab = () => {
-        if (tabs.length >= maxTabs) return;
-        const newKey = `${tabs.length + 1}`;
-        setTabs(prev => [...prev, newKey]);
-        setActive(newKey);
+    const [forcePlace, setForcePlace] = useState(false);
+
+    const getTabData = (id: number) => {
+        return greenhouseTabData.find(t => t.id === id) ?? {id, cells: emptyGrid(), placements: []};
     };
+
+    const activeTabId = parseInt(active, 10);
+
+    useEffect(() => {
+        if (!clearGrid || !clearGridType) return;
+
+        setGreenhouseTabData(prev =>
+            prev.map(t => {
+                if (t.id !== activeTabId) return t;
+
+                if (clearGridType === "output" || clearGridType === "intermediate") {
+                    const removedIds = new Set(
+                        t.placements.filter(p => p.type === "output" || p.type === "intermediate").map(p => p.instanceId)
+                    );
+                    if (removedIds.size === 0) return t;
+
+                    return {
+                        ...t,
+                        cells: t.cells.map(c => (removedIds.has(c) ? "empty" : c)),
+                        placements: t.placements.filter(p => !removedIds.has(p.instanceId)),
+                    };
+                }
+                const removedIds = new Set(
+                    t.placements.filter(p => p.type === clearGridType).map(p => p.instanceId)
+                );
+                if (removedIds.size === 0) return t;
+
+                return {
+                    ...t,
+                    cells: t.cells.map(c => (removedIds.has(c) ? "empty" : c)),
+                    placements: t.placements.filter(p => !removedIds.has(p.instanceId)),
+                };
+            })
+        );
+
+        setClearGrid?.(false);
+    }, [clearGrid, clearGridType, activeTabId, setClearGrid]);
 
     return (
         <div>
-            <div className="d-flex align-items-end gap-1 border-bottom border-secondary "
-                 style={{ height: "40px"}}
+            <div
+                className="d-flex align-items-end border-bottom border-secondary"
+                style={{height: "40px"}}
             >
-                {tabs.map(key => (
-                    <TabButton key={key} tabKey={key} active={active} setActive={setActive} />
-                ))}
-                {tabs.length < maxTabs && <AddTabButton onClick={addTab} />}
+                <div className="d-flex align-items-end gap-1">
+                    {tabs.map((key, i) => (
+                        <TabButton
+                            key={key}
+                            tabKey={key}
+                            active={active}
+                            iconName={"delete"}
+                            setActive={setActive}
+                            onDelete={i === 0 ? undefined : () => deleteTab(key, setTabs, setActive, setGreenhouseTabData, active)}
+                        />
+                    ))}
+
+                    {tabs.length < maxTabs &&
+                        <AddTabButton
+                            onClick={() => addTab(tabs, active, setTabs, setActive, setGreenhouseTabData, maxTabs)}
+                        />
+                    }
+                </div>
+
+                <div className="d-flex align-items-end gap-1 ms-auto">
+                    {/*<button*/}
+                    {/*    className="btn btn-sm btn-outline-secondary"*/}
+                    {/*    onClick={() => printCropMap(active, getTabData)}*/}
+                    {/*>*/}
+                    {/*    Print Map*/}
+                    {/*</button>*/}
+
+                    <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() =>
+                        setForcePlace(prev => !prev)}
+                    >
+                        Force
+                    </button>
+                </div>
             </div>
 
-            <div className="border border-top-0 border-secondary-subtle" style={{ backgroundColor: "#0f172a" }}>
-                {tabs.map(key => active === key && (
-                    <GreenhousGrid key={key} cells={cells} setCells={setCells} />
-                ))}
+            <div className="border border-top-0 border-secondary-subtle" style={{backgroundColor: "#0f172a"}}>
+                {tabs.map(key => {
+                    const tabId = parseInt(key, 10);
+                    const tabData = getTabData(tabId);
+                    return active === key && (
+                        <GreenhouseGrid
+                            key={key}
+                            cells={tabData.cells}
+                            selectedCrop={selectedCrop}
+                            hoveredIndex={hoveredIndex}
+                            setHoveredIndex={setHoveredIndex}
+
+                            greenhouseTabData={greenhouseTabData}
+                            setGreenhouseTabData={setGreenhouseTabData}
+                            selectedType={selectedType}
+                            activeTab={tabId}
+                            clearGrid={clearGrid}
+                            setClearGrid={setClearGrid}
+                            clearGridType={clearGridType}
+                            generateTrigger={generateTrigger}
+                            setGenerateTrigger={setGenerateTrigger}
+                            generatorItems={generatorItems}
+                            setGeneratorItems={setGeneratorItems}
+                            setCells={function (): void {
+                                throw new Error("Function not implemented.");
+                            }}
+                        />
+                    );
+                })}
+                <div className="d-flex flex-wrap gap-3 items-center justify-content-center mb-3">
+                    <Legend/>
+                </div>
             </div>
         </div>
     );

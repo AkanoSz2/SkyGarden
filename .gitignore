@@ -25,5 +25,7 @@ cache.json
 *.sln
 *.sw?
 
-todo
-public/temp/mystats.json
+.dev/
+
+src/cache/bazaarCache.json
+src/cache/playerCache.json

@@ -8,8 +8,8 @@ import { getBazaarPrice } from './src/features/itemPrices';
 import { readCache, writeCache, isCacheFresh } from './src/cache/cache';
 
 const PLAYER_CACHE_FILE = './src/cache/playerCache.json';
-// const PLAYER_CACHE_TTL = 1000 * 60 * 5 ; // 5 minutes
-const PLAYER_CACHE_TTL = 1000; // 1s dev mode
+const PLAYER_CACHE_TTL = 1000 * 60 * 10 ; // 10 minutes
+// const PLAYER_CACHE_TTL = 1000; // 1s dev mode
 
 
 const BAZAAR_CACHE_FILE = './src/cache/bazaarCache.json';
@@ -38,6 +38,15 @@ async function refreshBazaarCache() {
 
 const app = new Hono();
 app.use('*', cors());
+
+
+app.get('/bazaar', (c) => {
+    const cache = readCache<any>(BAZAAR_CACHE_FILE);
+    if (!cache) return c.json({ error: 'Bazaar cache not ready' }, 503);
+
+    console.log('Bazaar cache hit');
+    return c.json(cache.data);
+});
 
 app.get('/player/:name', async (c) => {
     const name = c.req.param('name');

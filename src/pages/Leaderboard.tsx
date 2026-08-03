@@ -1,10 +1,8 @@
 import { useState, useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { InputCrops, GreenhouseLayout, Stats } from "../components";
 import { Navbar, Footer } from "../components/ui";
-import { RatesPanel } from "../components/leaderboard";
-import { getMutation } from "../components/shared";
-import type { TableGreenhouseRow } from "../components/shared/types";
+import { getMutation } from "../features/shared";
+import type { TableGreenhouseRow } from "../features/shared/types.ts";
 import { PlayerDataProvider } from "../context/PlayerDataContext";
 
 export function Leaderboard() {
@@ -37,34 +35,6 @@ export function Leaderboard() {
         <PlayerDataProvider>
             <div data-bs-theme="dark">
                 <Navbar />
-                <div className="w-100 bg-dark py-4" style={{ minHeight: "100vh" }}>
-                    <div className="mx-auto d-flex gap-2 mb-5 justify-content-evenly align-items-start flex-nowrap"
-                         style={{ width: "100%", maxWidth: "100%", padding: "0 20px", userSelect: "none" }}>
-                        <div style={{ width: "20%", flexShrink: 0 }}>
-                            <Stats />
-                        </div>
-                        <div style={{ width: "40%", flexShrink: 0, position: "relative" }}>
-                            <GreenhouseLayout
-                                cells={cells}
-                                selectedCrop={selectedCrop}
-                                hoveredIndex={hoveredIndex}
-                                setCells={setCells}
-                                setHoveredIndex={setHoveredIndex}
-                            />
-                        </div>
-                        <div style={{ width: "30%", flexShrink: 0 }}>
-                            <InputCrops
-                                selectedCrop={selectedCrop}
-                                setSelectedCrop={handleSelectCrop}
-                                setHoverCropedIndex={setHoveredIndex}
-                            />
-                        </div>
-                    </div>
-                    <div className="mx-auto d-flex flex-column justify-content-center"
-                         style={{ width: "100%", padding: "0 40px", gap: "12px" }}>
-                        <RatesPanel greenhouseRows={greenhouseRows} />
-                    </div>
-                </div>
                 <Footer />
             </div>
         </PlayerDataProvider>

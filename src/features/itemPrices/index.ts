@@ -1,4 +1,4 @@
-import { initializeCropData, CropRarityMap } from "../../components/shared/CropData";
+import { initializeCropData, CropRarityMap } from "../shared/scripts/CropData.ts";
 import { getBazaarItems } from "../itemPrices/services/bazaar.ts";
 import type { BazaarProduct, BazaarItem } from "../itemPrices/types.ts";
 import { CropBazaarIdMap } from "./data/extraItems.ts";

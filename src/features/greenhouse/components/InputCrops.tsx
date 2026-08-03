@@ -1,132 +1,19 @@
-import { useState, useEffect } from "react";
-import { StyledDropdown } from "../../../components/ui";
+import {useState, useEffect} from "react";
 import {
     CropRarityMap,
     initializeCropData,
     type Rarity,
-    getMutation,
-    RarityColors,
+
     formatCropName
-}  from "../../../components/shared/CropData";
+} from "../../shared/scripts/CropData.ts";
 
-import {Tab, Tabs } from "react-bootstrap";
+import type {
+    RarityItem,
+    Props,
+} from "../types.ts";
 
-type RarityItem = {
-    name: string;
-    img: string;
-    value: "all" | Rarity;
-};
+import {InputCropMap} from "./InputCropMap.tsx";
 
-type Props = {
-    selectedCrop?: string;
-    setSelectedCrop: (crop?: string) => void;
-    setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
-};
-
-
-type MapGridProps = {
-    cells: string[];
-    title?: string;
-    onCropClick?: (cropId: string) => void;
-    selectedCrop?: string;
-};
-
-export function InputCropMap({ cells, title, onCropClick, selectedCrop  }: MapGridProps) {
-    return (
-        <div className="mb-3">
-            {title && (
-                <h6 className="text-white mb-2 text-uppercase fw-bold">
-                    {title}
-                </h6>
-            )}
-
-            {/* GRID*/}
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(65px, 1fr))",
-                    gap: "8px",
-                }}
-            >
-                {cells.map((cell) => {
-                    const mutation = getMutation(cell);
-                    const rarity =
-                        (mutation?.rarity || "crops") as keyof typeof RarityColors;
-                    const colors = RarityColors[rarity];
-
-                    const displayName = formatCropName(cell);
-
-                    return (
-                        <div
-                            key={cell}
-                            className="border hover-effect"
-                            style={{
-                                aspectRatio: "1 / 1",
-                                display: "flex",
-                                flexDirection: "column",
-                                backgroundColor: colors.bg,
-                                boxShadow: selectedCrop === cell
-                                    ? `0 0 10px ${colors.border}, 0 0 18px ${colors.border}55`
-                                    : `0 2px 6px rgba(0,0,0,0.4)`,
-                                // transition: "all 0.2s ease",
-                                // cursor: onCropClick ? "pointer" : "default",
-                                overflow: "hidden",
-                            }}
-                            onClick={() => onCropClick?.(cell)}
-                        >
-                            <div
-                                style={{
-                                    flex: 1,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: "4px",
-                                    minHeight: 0,
-                                }}
-                            >
-                                <img
-                                    src={`/greenhouse/crops/${cell}.png`}
-                                    alt={displayName}
-                                    style={{
-                                        width: "78%",
-                                        height: "78%",
-                                        objectFit: "contain",
-                                        imageRendering: "pixelated",
-                                    }}
-                                    onError={(e) => {
-                                        e.currentTarget.src = "/greenhouse/crops/dead_plant.png";
-                                    }}
-                                />
-                            </div>
-
-                            <div
-                                style={{
-                                    height: "18px",
-                                    flexShrink: 0,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: "10px",
-                                    lineHeight: "1",
-                                    padding: "0 2px",
-                                    color: colors.text,
-                                    fontWeight: rarity === "legendary" ? "bold" : "500",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                }}
-                                title={displayName}
-                            >
-                                {displayName}
-                            </div>
-                        </div>);
-                })}
-            </div>
-
-            <hr className="my-3 border-secondary"/>
-        </div>
-    );
-}
 
 export function InputCrops({
                                selectedCrop,
@@ -175,8 +62,6 @@ export function InputCrops({
             value: r
         }));
 
-    const selectedItem = rarityItems.find(i => i.value === selectedRarity) ?? rarityItems[0];
-
     const normalizedSearch = search.trim().toLowerCase();
 
     const matchesSearch = (id: string) => {
@@ -209,9 +94,10 @@ export function InputCrops({
             className="d-flex flex-column border border-[#334155] overflow-hidden"
             style={{
                 width: "100%",
-                height: "550px",
+                height: "750px",
                 minHeight: 0,
                 backgroundColor: "#0f172a",
+                overscrollBehavior: "none",
             }}
         >
             <div className="p-3 border-bottom border-[#334155]">
@@ -224,20 +110,22 @@ export function InputCrops({
                         onChange={(e) => setSearch(e.target.value)}
                     />
 
-                    <div style={{ width: "170px" }}>
-                        <StyledDropdown
-                            items={rarityItems}
-                            value={selectedItem}
-                            onChange={(item) => setSelectedRarity(item.value as "all" | Rarity)}
-                            renderItem={(item) => (
-                                <span className="text-capitalize">{item.name}</span>
-                            )}
-                        />
-                    </div>
+                    <select
+                        className="form-select bg-[#1e2937] border-0 text-light"
+                        style={{width: "170px"}}
+                        value={selectedRarity}
+                        onChange={(e) => setSelectedRarity(e.target.value as "all" | Rarity)}
+                    >
+                        {rarityItems.map((item) => (
+                            <option key={item.value} value={item.value}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
 
-            <div className="flex-grow-1 overflow-auto p-2" style={{ minHeight: 0 }}>
+            <div className="flex-grow-1 overflow-auto p-2" style={{minHeight: 0}}>
                 {filteredSections.map((section) => (
                     <div key={section.title}>
                         <InputCropMap
