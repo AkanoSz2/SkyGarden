@@ -17,6 +17,7 @@ export type PlacementEntry = {
     type?: string;
     valid?: boolean;
     placedByUser?: boolean;
+    forcePlaced: boolean;
 };
 
 export type GridCellProps = {
@@ -59,6 +60,8 @@ export type GreenhouseLayoutProps = {
 
     generatorItems: GeneratorItem[];
     setGeneratorItems: React.Dispatch<React.SetStateAction<GeneratorItem[]>>;
+
+    forcePlace?: boolean;
 };
 
 export type LegendItem = {
@@ -90,13 +93,14 @@ export type MapGridProps = {
 
 
 // sidebar
-export type HelperProp = {
-    selectedType?: string;
+export interface HelperProp {
+    selectedType: string;
     setSelectedType: (type: string) => void;
     clearGrid?: boolean;
     setClearGrid?: (clear: boolean) => void;
     clearGridType?: string;
     setClearGridType?: (type: string) => void;
-
+    greenhouseTabData?: GreenhouseTabData[];
+    setShowImportModal: (show: boolean) => void;
 }
 

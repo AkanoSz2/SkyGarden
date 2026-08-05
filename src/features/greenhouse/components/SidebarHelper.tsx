@@ -1,30 +1,45 @@
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Button from "react-bootstrap/Button";
+import type { GreenhouseTabData } from "../types.ts";
 import { LuUpload, LuDownload, LuRefreshCw } from "react-icons/lu";
 
 import { useEffect, useState } from "react";
 
 import type {HelperProp} from "../types.ts";
 
+import {exportData} from "../scripts/dataTransfer.ts";
+
+
 function SideBarContent({
                             type,
                             setClearGrid,
                             setClearGridType,
+                            greenhouseTabData,
+                            setShowImportModal,
                         }: {
     type: string;
     setClearGrid?: (clear: boolean) => void;
     setClearGridType?: (type: string) => void;
+    greenhouseTabData?: GreenhouseTabData[];
+    setShowImportModal?: (show: boolean) => void;
 }) {
+
     return (
         <div className="d-flex flex-column gap-2 px-3 pb-3 mt-3">
             <div className="d-grid gap-2 mb-2" style={{gridTemplateColumns: "1fr 1fr", display: "grid"}}>
-                <Button variant="primary" size="sm" className="d-flex align-items-center justify-content-center gap-2">
-                    <LuUpload size={15}/> Export
-                </Button>
                 <Button variant="secondary" size="sm" className="d-flex align-items-center justify-content-center gap-2"
-                        style={{background: "#2d1b4e", borderColor: "#7c3aed", color: "#c4b5fd"}}>
+                        style={{background: "#2d1b4e", borderColor: "#7c3aed", color: "#c4b5fd"}}
+                        onClick={() => setShowImportModal?.(true)}
+                >
                     <LuDownload size={15}/> Import
+                </Button>
+                <Button variant="primary" size="sm" className="d-flex align-items-center justify-content-center gap-2"
+                        onClick={() => {
+                            exportData(greenhouseTabData ?? []);
+                        }}
+                >
+                    <LuUpload size={15}/> Export
                 </Button>
             </div>
             <hr className="m-0 text-white"/>
@@ -47,8 +62,11 @@ export function SidebarHelper({
                                   selectedType,
                                   setSelectedType,
                                   setClearGrid,
-                                  setClearGridType
+                                  setClearGridType,
+                                  greenhouseTabData,
+                                  setShowImportModal
                               }: HelperProp) {
+
     const [activeKey, setActiveKey] = useState(selectedType ?? "input");
 
     useEffect(() => {
@@ -61,6 +79,12 @@ export function SidebarHelper({
         setActiveKey(key);
         setSelectedType(key);
     };
+    const tabTypes = [
+        { eventKey: "input", title: "Input", type: "input" },
+        { eventKey: "helper", title: "Helpers", type: "helper" },
+        { eventKey: "output", title: "Target", type: "output" },
+    ];
+
     return (
         <div
             className="overflow-hidden border"
@@ -73,15 +97,17 @@ export function SidebarHelper({
                 className="mb-0"
                 justify
             >
-                <Tab eventKey="input" title="Input">
-                    <SideBarContent type="input" setClearGrid={setClearGrid} setClearGridType={setClearGridType}/>
-                </Tab>
-                <Tab eventKey="helper" title="Helpers">
-                    <SideBarContent type="helper" setClearGrid={setClearGrid} setClearGridType={setClearGridType}/>
-                </Tab>
-                <Tab eventKey="output" title="Target">
-                    <SideBarContent type="output" setClearGrid={setClearGrid} setClearGridType={setClearGridType}/>
-                </Tab>
+                {tabTypes.map(({ eventKey, title, type }) => (
+                    <Tab key={eventKey} eventKey={eventKey} title={title}>
+                        <SideBarContent
+                            type={type}
+                            setClearGrid={setClearGrid}
+                            setClearGridType={setClearGridType}
+                            greenhouseTabData={greenhouseTabData}
+                            setShowImportModal={setShowImportModal}
+                        />
+                    </Tab>
+                ))}
             </Tabs>
         </div>
     );

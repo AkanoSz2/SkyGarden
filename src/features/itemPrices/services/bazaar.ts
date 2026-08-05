@@ -1,11 +1,11 @@
 import type { BazaarItems } from "../types.ts";
-import { hypixelFetch } from "../../playerStats/services/hypixel.ts";
 
 export async function getBazaarItems(): Promise<BazaarItems> {
-    const data = await hypixelFetch<BazaarItems>(
-        `https://api.hypixel.net/v2/skyblock/bazaar`,
-        "Hypixel Bazaar API",
-    );
+    const res = await fetch("https://api.hypixel.net/skyblock/bazaar");
 
-    return data;
+    if (!res.ok) {
+        throw new Error(`Hypixel Bazaar API error: ${res.status}`);
+    }
+
+    return await res.json() as Promise<BazaarItems>;
 }

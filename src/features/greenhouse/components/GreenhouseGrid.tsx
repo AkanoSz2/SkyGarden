@@ -31,6 +31,7 @@ export function GreenhouseGrid({
                                    generateTrigger,
                                    setGenerateTrigger,
                                    generatorItems,
+                                   forcePlace
                                }: GreenhouseLayoutProps) {
     const [isDragging, setIsDragging] = useState(false);
 
@@ -59,25 +60,43 @@ export function GreenhouseGrid({
         if (!generateTrigger) return;
         setGenerateTrigger?.(false);
 
+
         const { placements } = startGenerating(generatorItems, gridCells);
 
+        // console.log(greenhouseTabData[activeTab - 1])
+        const originalPlacements = greenhouseTabData[activeTab - 1]?.placements ?? [];
+
+        // console.log("hi", gridCells)
         setGreenhouseTabData(prev =>
             prev.map(tab =>
-                tab.id === activeTab ? { ...tab, cells: emptyGrid(), placements: [] } : tab
+                tab.id === activeTab ? { ...tab,
+                    cells: gridCells,
+                    placements: originalPlacements
+            } : tab
             )
         );
 
+
         placements.forEach(({ crop, row, col, type, linkedto }) => {
             const startIndex = row * GRID + col;
-            // console.log(`Placing crop ${crop} at row ${row}, col ${col}, at exactly ${startIndex} type ${type} linkedTo ${linkedto}`);
-            if(!crop || !type) return;
+            if (!crop || !type) return;
 
-            if(gridCells[startIndex] !== "empty") {
-                // console.warn(`Cannot place crop ${crop} at index ${startIndex}, cell is not empty.`);
+            if (gridCells[startIndex] !== "empty") {
+                const cellValue = gridCells[startIndex];
+                const previousType = originalPlacements.find(p => p.instanceId === cellValue)?.type;
+
+                const previousForcedPlace = greenhouseTabData[activeTab - 1]?.placements.find(p => p.instanceId === cellValue)?.forcePlaced;
+                // console.log("previousForcedPlace", previousForcedPlace, "previousType", previousType, "type", type)
+
+                if ((previousType === "output" || previousType === "intermediate" || previousForcedPlace) && type === "input") {
+                    placeCrop(startIndex, crop, "forced", activeTab, setGreenhouseTabData, false);
+                    return;
+                }
             }
-
-            placeCrop(startIndex, crop, type, activeTab, setGreenhouseTabData, true);
+            placeCrop(startIndex, crop, type, activeTab, setGreenhouseTabData, false);
         });
+
+        // console.table(greenhouseTabData[0].placements)
     }, [generateTrigger, generatorItems, gridCells, activeTab, setGenerateTrigger, setGreenhouseTabData]);
 
     return (
@@ -116,8 +135,12 @@ export function GreenhouseGrid({
                             selectedCrop={selectedCrop}
                             border={border}
                             colors={colors}
-                            onMouseDown={(e) => handleMouseDown(index, e, selectedCrop, selectedType, activeTab, setGreenhouseTabData, setHoveredIndex, setIsDragging)}
-                            onMouseEnter={() => handleMouseEnter(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData, setHoveredIndex, isDragging)}
+                            onMouseDown={(e) => handleMouseDown(
+                                index, e, selectedCrop, selectedType,
+                                activeTab, setGreenhouseTabData, setHoveredIndex,
+                                setIsDragging, forcePlace)}
+                            onMouseEnter={() => handleMouseEnter(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData,
+                                setHoveredIndex, isDragging, forcePlace)}
                             onMouseLeave={() => {
                                 if (!isDragging) setHoveredIndex?.(null);
                             }}

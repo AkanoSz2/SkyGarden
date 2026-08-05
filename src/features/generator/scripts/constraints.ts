@@ -549,7 +549,7 @@ function logGridAsRows(tabData: string[]) {
     for (let i = 0; i < tabData.length; i += GRID) {
         rows.push(tabData.slice(i, i + GRID));
     }
-    // console.table(rows);
+    console.table(rows);
 }
 
 function expandItemData(initialItems: GeneratorItem[]): GeneratorItemExpanded[] {
@@ -616,10 +616,13 @@ export function startGenerating(
     grid: string[];
     placements: PlacedItem[]
 } {
+
+    console.log()
     const placements: PlacedItem[] = [];
     const newData = expandItemData(initialItems);
     newData.sort((a, b) => b.priority - a.priority);
     const grid = checkConstraintsRules(newData, tabData, placements);
 
+    // console.log(`Final placements:`, placements);
     return { grid, placements };
 }

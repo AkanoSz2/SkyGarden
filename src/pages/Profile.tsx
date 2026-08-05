@@ -802,6 +802,18 @@ function CustomFactors() {
                                 <option value="Sowdust">Sowdust</option>
                                 <option value="PB">Personal Bests</option>
                             </select>
+                        ) : label === "Crop Effect Yield" ? (
+                            <select
+                                value={priority}
+                                onChange={(e) => setPriority(e.target.value)}
+                                className="rounded-2 px-2 py-1"
+                                style={{fontSize: "12px", fontWeight: 600, background: "rgba(25, 29, 38, 0.95)", color: "#e5e7eb", border: "1px solid rgba(55, 65, 85, 0.7)", cursor: "pointer", outline: "none", flexShrink: 0}}
+                            >
+                                <option value="0">Default</option>
+                                <option value="10">+ 10%</option>
+                                <option value="20">+ 20%</option>
+                                <option value="30">+ 30%</option>
+                            </select>
                         ) : (
                             <input
                                 type="number"

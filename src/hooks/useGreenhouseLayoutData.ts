@@ -9,6 +9,7 @@ type GreenhouseLayoutData = {
     drops: Record<string, number>;
     sowdust: number;
     requirements: Record<string, number>;
+
 }
 
 export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
@@ -16,12 +17,6 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
 
     for(const entry in greenhouseTabData) {
         for (const placement of greenhouseTabData[entry].placements) {
-            if (
-                placement.type !== "output"
-                // placement.type !== "intermediate"
-            ) continue;
-            if (placement.valid === false) continue;
-
             const cropName = placement.crop.split("#")[0];
 
             if (!totals[cropName]) {
@@ -31,9 +26,15 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
                     rarity: getCropData(cropName)?.rarity ?? getMutation(cropName)?.rarity ?? "common",
                     drops: {},
                     sowdust: 0,
-                    requirements: {}
+                    requirements: {},
                 };
             }
+
+            if (
+                placement.type !== "output" && placement.type !== "forced"
+                // placement.type !== "intermediate"
+            ) continue;
+            if (placement.valid === false) continue;
 
             const placementSize = getCropData(cropName)?.size ?? getMutation(cropName)?.size ?? {width: 1, height: 1};
             const count = placement.positions.length / (placementSize ** 2);
@@ -46,8 +47,8 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
             totals[cropName].requirements = {
                 ...totals[cropName].requirements, ...getCropData(cropName)?.requirements ?? getMutation(cropName)?.requirements ?? {}
             }
-
         }
     }
+
     return totals;
 }

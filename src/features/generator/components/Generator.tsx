@@ -50,19 +50,7 @@ function GeneratorItemContent({
                 borderColor: "#2a3044",
             }}
         >
-            <div className="d-flex align-items-center gap-2 mb-2">
-                <img
-                    src={`public/greenhouse/crops/${item.crop}.png`}
-                    alt={item.crop}
-                    width={40}
-                    height={40}
-                    className="rounded"
-                    style={{
-                        objectFit: "cover",
-                        flexShrink: 0,
-                    }}
-                />
-
+            <div className="d-flex align-items-center justify-content-between gap-2 mb-2">
                 <Select
                     options={CropOptions}
                     value={CropOptions.find(option => option.value === item.crop)}
@@ -77,7 +65,7 @@ function GeneratorItemContent({
                     formatOptionLabel={(option) => (
                         <div className="d-flex align-items-center">
                             <img
-                                src={`public/greenhouse/crops/${option.value}.png`}
+                                src={`/greenhouse/crops/${option.value}.png`}
                                 alt={option.label}
                                 width={20}
                                 height={20}
@@ -89,7 +77,7 @@ function GeneratorItemContent({
                     styles={{
                         container: (provided) => ({
                             ...provided,
-                            width: "65%",
+                            width: "70%",
                             flexShrink: 0,
                             overscrollBehavior: "none",
                         }),

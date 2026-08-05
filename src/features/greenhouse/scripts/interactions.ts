@@ -9,12 +9,13 @@ export function handleMouseDown(
     activeTab: number,
     setGreenhouseTabData: React.Dispatch<React.SetStateAction<GreenhouseTabData[]>>,
     setHoveredIndex?: React.Dispatch<React.SetStateAction<number | null>>,
-    setIsDragging?: React.Dispatch<React.SetStateAction<boolean>>
+    setIsDragging?: React.Dispatch<React.SetStateAction<boolean>>,
+    forcePlace?: boolean
 ) {
     if (e.button === 2) return;
     if (!selectedCrop) return;
     setIsDragging?.(true);
-    placeCrop(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData);
+    placeCrop(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData, true, forcePlace);
     setHoveredIndex?.(null);
 };
 
@@ -25,9 +26,10 @@ export function handleMouseEnter(
     activeTab: number,
     setGreenhouseTabData: React.Dispatch<React.SetStateAction<GreenhouseTabData[]>>,
     setHoveredIndex?: React.Dispatch<React.SetStateAction<number | null>>,
-    isDragging?: boolean
+    isDragging?: boolean,
+    forcePlace?: boolean
 ) {
-    if (isDragging && selectedCrop) placeCrop(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData);
+    if (isDragging && selectedCrop) placeCrop(index, selectedCrop, selectedType, activeTab, setGreenhouseTabData, true, forcePlace);
     else setHoveredIndex?.(index);
 };
 

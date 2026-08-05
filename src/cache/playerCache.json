@@ -9,10 +9,10 @@
         "fortune": {
           "breakthrough": {
             "fortune": {
-              "total": 1997.05,
+              "total": 2015.05,
               "sources": {
                 "farmingLevel": 240,
-                "armorAndEquipment": 852,
+                "armorAndEquipment": 870,
                 "accessories": 44,
                 "chips": 100,
                 "shards": 60,
@@ -34,16 +34,16 @@
                 "atmospheric": 50
               }
             },
-            "totalBaseFortune": 2777.05,
+            "totalBaseFortune": 2795.05,
             "cropFortune": {
               "Cocoa_Beans": {
-                "finalFortune": 3211.05,
-                "baseFortune": 2431.05,
-                "actualCropFortune": 3617,
+                "finalFortune": 3229.05,
+                "baseFortune": 2449.05,
+                "actualCropFortune": 3635,
                 "totalCropFortune": 406,
                 "personalBestCollection": 3.15,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 28,
                   "toolCropFortune": 169,
@@ -55,13 +55,13 @@
                 }
               },
               "Nether_Wart": {
-                "finalFortune": 3300.05,
-                "baseFortune": 2520.05,
-                "actualCropFortune": 3716,
+                "finalFortune": 3318.05,
+                "baseFortune": 2538.05,
+                "actualCropFortune": 3734,
                 "totalCropFortune": 416,
                 "personalBestCollection": 12.33,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 107,
                   "toolCropFortune": 225,
@@ -73,13 +73,13 @@
                 }
               },
               "Melon_Slice": {
-                "finalFortune": 3237.94,
-                "baseFortune": 2457.94,
-                "actualCropFortune": 3666,
+                "finalFortune": 3255.94,
+                "baseFortune": 2475.94,
+                "actualCropFortune": 3684,
                 "totalCropFortune": 428,
                 "personalBestCollection": 3.34,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 32,
                   "toolCropFortune": 225,
@@ -91,13 +91,13 @@
                 }
               },
               "Carrot": {
-                "finalFortune": 3223.3100000000004,
-                "baseFortune": 2443.3100000000004,
-                "actualCropFortune": 3567,
+                "finalFortune": 3241.3100000000004,
+                "baseFortune": 2461.3100000000004,
+                "actualCropFortune": 3585,
                 "totalCropFortune": 344,
                 "personalBestCollection": 1.57,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 102,
                   "toolCropFortune": 201,
@@ -109,13 +109,13 @@
                 }
               },
               "Sunflower": {
-                "finalFortune": 3224.5600000000004,
-                "baseFortune": 2444.5600000000004,
-                "actualCropFortune": 3554,
+                "finalFortune": 3242.5600000000004,
+                "baseFortune": 2462.5600000000004,
+                "actualCropFortune": 3572,
                 "totalCropFortune": 329,
                 "personalBestCollection": 1.05,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 118,
                   "toolCropFortune": 186,
@@ -127,13 +127,13 @@
                 }
               },
               "Moonflower": {
-                "finalFortune": 3247.83,
-                "baseFortune": 2467.83,
-                "actualCropFortune": 3600,
+                "finalFortune": 3265.83,
+                "baseFortune": 2485.83,
+                "actualCropFortune": 3618,
                 "totalCropFortune": 352,
                 "personalBestCollection": 1.52,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 118,
                   "toolCropFortune": 186,
@@ -145,13 +145,13 @@
                 }
               },
               "Mushroom": {
-                "finalFortune": 3317.32,
-                "baseFortune": 2537.32,
-                "actualCropFortune": 3731,
+                "finalFortune": 3335.32,
+                "baseFortune": 2555.32,
+                "actualCropFortune": 3749,
                 "totalCropFortune": 414,
                 "personalBestCollection": 0.9,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 126,
                   "toolCropFortune": 221,
@@ -163,15 +163,15 @@
                 }
               },
               "Sugar_Cane": {
-                "finalFortune": 3341.05,
-                "baseFortune": 2561.05,
-                "actualCropFortune": 3757,
+                "finalFortune": 3335.05,
+                "baseFortune": 2555.05,
+                "actualCropFortune": 3751,
                 "totalCropFortune": 416,
                 "personalBestCollection": 47.59,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
-                  "toolFortune": 148,
+                  "toolFortune": 124,
                   "toolCropFortune": 225,
                   "cropUpgrade": 45,
                   "carrolyn": 0,
@@ -181,13 +181,13 @@
                 }
               },
               "Cactus": {
-                "finalFortune": 3082.38,
-                "baseFortune": 2302.38,
-                "actualCropFortune": 3291,
+                "finalFortune": 3100.38,
+                "baseFortune": 2320.38,
+                "actualCropFortune": 3309,
                 "totalCropFortune": 209,
                 "personalBestCollection": 0.49,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 96,
                   "toolCropFortune": 97,
@@ -199,13 +199,13 @@
                 }
               },
               "Pumpkin": {
-                "finalFortune": 3152.05,
-                "baseFortune": 2372.05,
-                "actualCropFortune": 3492,
+                "finalFortune": 3170.05,
+                "baseFortune": 2390.05,
+                "actualCropFortune": 3510,
                 "totalCropFortune": 340,
                 "personalBestCollection": 6.05,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 35,
                   "toolCropFortune": 149,
@@ -216,34 +216,16 @@
                   "personalBests": 100
                 }
               },
-              "Potato": {
-                "finalFortune": 3319.8900000000003,
-                "baseFortune": 2539.8900000000003,
-                "actualCropFortune": 3757,
-                "totalCropFortune": 437,
-                "personalBestCollection": 2.28,
-                "sources": {
-                  "base": 1997.05,
-                  "baseTemp": 780,
-                  "toolFortune": 105,
-                  "toolCropFortune": 225,
-                  "cropUpgrade": 45,
-                  "carrolyn": 0,
-                  "chips": 140,
-                  "dedication": 92,
-                  "personalBests": 75.84
-                }
-              },
               "Wild_Rose": {
-                "finalFortune": 3372.05,
-                "baseFortune": 2592.05,
-                "actualCropFortune": 3856,
+                "finalFortune": 3419.05,
+                "baseFortune": 2639.05,
+                "actualCropFortune": 3903,
                 "totalCropFortune": 484,
                 "personalBestCollection": 25.37,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
-                  "toolFortune": 111,
+                  "toolFortune": 140,
                   "toolCropFortune": 235,
                   "cropUpgrade": 45,
                   "carrolyn": 12,
@@ -252,14 +234,32 @@
                   "personalBests": 100
                 }
               },
+              "Potato": {
+                "finalFortune": 3376.8900000000003,
+                "baseFortune": 2596.8900000000003,
+                "actualCropFortune": 3819,
+                "totalCropFortune": 442,
+                "personalBestCollection": 2.28,
+                "sources": {
+                  "base": 2015.05,
+                  "baseTemp": 780,
+                  "toolFortune": 139,
+                  "toolCropFortune": 230,
+                  "cropUpgrade": 45,
+                  "carrolyn": 0,
+                  "chips": 140,
+                  "dedication": 92,
+                  "personalBests": 75.84
+                }
+              },
               "Wheat": {
-                "finalFortune": 3216.3500000000004,
-                "baseFortune": 2436.3500000000004,
-                "actualCropFortune": 3555,
+                "finalFortune": 3234.3500000000004,
+                "baseFortune": 2454.3500000000004,
+                "actualCropFortune": 3573,
                 "totalCropFortune": 339,
                 "personalBestCollection": 0.59,
                 "sources": {
-                  "base": 1997.05,
+                  "base": 2015.05,
                   "baseTemp": 780,
                   "toolFortune": 100,
                   "toolCropFortune": 177,
@@ -364,7 +364,7 @@
                 "type": "ROSE_DRAGON",
                 "tier": "LEGENDARY",
                 "level": 200,
-                "exp": 359882189.29951346,
+                "exp": 366366103.463476,
                 "active": true,
                 "heldItem": "GREEN_BANDANA"
               }
@@ -392,8 +392,8 @@
                   },
                   {
                     "id": "HELIANTHUS_BOOTS",
-                    "name": "§c✿ §dMantid Helianthus Boots",
-                    "fortune": 79,
+                    "name": "§c✿ §dMossy Helianthus Boots",
+                    "fortune": 97,
                     "overbloom": 5
                   }
                 ]
@@ -532,7 +532,7 @@
                   {
                     "id": "THEORETICAL_HOE_CANE_3",
                     "name": "§6Blessed Turing Sugar Cane Cutter Mk. III",
-                    "fortune": 148,
+                    "fortune": 124,
                     "cropFortune": 225,
                     "cropName": "Sugar_Cane",
                     "dedicationLevel": 3
@@ -554,19 +554,19 @@
                     "dedicationLevel": 3
                   },
                   {
-                    "id": "THEORETICAL_HOE_POTATO_3",
-                    "name": "§6Bountiful Pythagorean Potato Shovel Mk. III",
-                    "fortune": 105,
-                    "cropFortune": 225,
-                    "cropName": "Potato",
+                    "id": "THEORETICAL_HOE_WILD_ROSE_3",
+                    "name": "§6Blessed Wild Rose Cutter Mk. III",
+                    "fortune": 140,
+                    "cropFortune": 235,
+                    "cropName": "Wild_Rose",
                     "dedicationLevel": 4
                   },
                   {
-                    "id": "THEORETICAL_HOE_WILD_ROSE_3",
-                    "name": "§6Blessed Wild Rose Cutter Mk. III",
-                    "fortune": 111,
-                    "cropFortune": 235,
-                    "cropName": "Wild_Rose",
+                    "id": "THEORETICAL_HOE_POTATO_3",
+                    "name": "§6Bountiful Pythagorean Potato Shovel Mk. III",
+                    "fortune": 139,
+                    "cropFortune": 230,
+                    "cropName": "Potato",
                     "dedicationLevel": 4
                   },
                   {
@@ -584,7 +584,7 @@
                   {
                     "id": "INFINI_VACUUM_HOOVERIUS",
                     "name": "§dBeady InfiniVacuum™ Hooverius",
-                    "fortune": 45
+                    "fortune": 50
                   }
                 ]
               }
@@ -680,7 +680,7 @@
           "growthUpgrade": 9
         }
       },
-      "timestamp": 1785320538402
+      "timestamp": 1785957100130
     },
     "fishying_Cucumber": {
       "data": {
@@ -3280,5 +3280,5 @@
       "timestamp": 1784324598968
     }
   },
-  "timestamp": 1785320538402
+  "timestamp": 1785957100130
 }

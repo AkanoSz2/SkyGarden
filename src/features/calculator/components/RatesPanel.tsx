@@ -17,7 +17,8 @@ import Select from "react-select";
 import {getBazaarPrice} from "../../itemPrices";
 
 
-const GreenhouseCount = 1
+const GreenhouseCount = 3
+const miningFortune = 2000
 
 interface RequirementEntry {
     crop: string;
@@ -64,7 +65,7 @@ function formatScaled(value: number): string {
 }
 
 
-function fortuneDropsFormula(userData: ReturnType<typeof usePlayerDataContext>, crop: string,  base: number, placedCrops: number) {
+function fortuneDropsFormula(userData: ReturnType<typeof usePlayerDataContext>, crop: string,  base: number, placedCrops: number, cropName?: string): number {
     const gardenCustomization = userData?.gardenCustomization ?? {};
     const {cropEffectYield, uniqueCrops, deskYield} = gardenCustomization;
 
@@ -93,6 +94,7 @@ function fortuneDropsFormula(userData: ReturnType<typeof usePlayerDataContext>, 
         (1 + fortune / 100) *
         base * placedCrops
     )
+    if(cropName === "chloronite") result  = base * placedCrops * (miningFortune / 500)
 
     return Math.trunc(result  * GreenhouseCount)
 }
@@ -238,7 +240,7 @@ function CropInfo({
     );
 }
 
-function CollectionGain({items, placedMutations}: { items: CollectionItem[], placedMutations: number }) {
+function CollectionGain({items, placedMutations, cropName}: { items: CollectionItem[], placedMutations: number, cropName?: string }) {
 
     const userData = usePlayerDataContext();
 
@@ -261,7 +263,7 @@ function CollectionGain({items, placedMutations}: { items: CollectionItem[], pla
                 </div>
             ) : (
                 Object.entries(items).map(([cropId, amount]) => {
-                    const rawValue = fortuneDropsFormula(userData, cropId, amount, placedMutations);
+                    const rawValue = fortuneDropsFormula(userData, cropId, amount, placedMutations, cropName);
                     return (
                         <CropInfoRow
                             key={cropId}
@@ -666,7 +668,7 @@ function RatesCropBreakdown({ row }: { row: TableGreenhouseRow | null }) {
                     </div>
                     <CropInfo  itemName={row.id} rarity={row.rarity} toolName={correctTool.id} count={row.count}  />
                     <SowdustGain sowdustPer={row.sowdust} amount={row.count} />
-                    <CollectionGain items={row.drops} placedMutations={row.count} />
+                    <CollectionGain items={row.drops} placedMutations={row.count} cropName={row.id} />
                     <ProfitGain cropName={row.id} drops={row.drops} requirements={row.requirements} count={row.count} />
                 </>
             ) : (

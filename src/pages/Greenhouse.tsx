@@ -2,11 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Footer } from "../components/ui";
 import {useState} from "react";
 
-import {GreenhouseLayout} from "../features/greenhouse";
+import {GreenhouseLayout, SidebarHelper, InputCrops, ImportModal, syncTabsFromImport, syncInstanceCounter } from "../features/greenhouse";
 
-import {InputCrops} from "../features/greenhouse/components/InputCrops.tsx";
-import {SidebarHelper} from "../features/greenhouse/components/SidebarHelper.tsx";
-import {Generator} from "../features/generator/components/Generator.tsx";
 import {PlayerDataProvider} from "../context/PlayerDataContext.tsx";
 
 import {CropFilterHelper, RatesPanel, TotalCollection} from "../features/calculator/components/RatesPanel.tsx";
@@ -14,7 +11,7 @@ import {type GeneratorItem} from "../features/generator/types.ts";
 import {emptyGrid} from "../features/greenhouse/scripts/placement.ts";
 
 import {GreenhouseDataLayoutProvider} from "../context/GreenhouseDataLayoutContext.tsx";
-
+import {Generator} from "../features/generator/components/Generator.tsx";
 import {type GreenhouseTabData} from "../features/greenhouse";
 
 export function Greenhouse() {
@@ -32,9 +29,20 @@ export function Greenhouse() {
         {id: 1, cells: emptyGrid(), placements: []},
     ]);
 
+    const [tabs, setTabs] = useState<string[]>(["1"]);
+    const [active, setActive] = useState<string>("1");
+
+    const [showImportModal, setShowImportModal] = useState<boolean>(false);
+
 
     const handleSelectCrop = (crop?: string) =>
         setSelectedCrop(prev => prev === crop ? undefined : crop);
+
+    const handleImport = (data: GreenhouseTabData[]) => {
+        setGreenhouseTabData(data);
+        syncTabsFromImport(data, setTabs, setActive);
+        syncInstanceCounter(data);
+    };
 
     return (
         <PlayerDataProvider>
@@ -56,6 +64,8 @@ export function Greenhouse() {
                                 setClearGrid={setClearGrid}
                                 clearGridType={clearGridType}
                                 setClearGridType={setClearGridType}
+                                greenhouseTabData={greenhouseTabData}
+                                setShowImportModal={setShowImportModal}
                             />
                             <Generator
                                 items={generatorItems}
@@ -81,6 +91,11 @@ export function Greenhouse() {
 
                                 greenhouseTabData={greenhouseTabData}
                                 setGreenhouseTabData={setGreenhouseTabData}
+
+                                tabs={tabs}
+                                setTabs={setTabs}
+                                active={active}
+                                setActive={setActive}
                             />
                         </div>
                         <div style={{width: "30%", flexShrink: 0, marginTop: "40px"}}>
@@ -115,6 +130,12 @@ export function Greenhouse() {
                             />
                         </div>
                     </div>
+
+                    <ImportModal
+                        show={showImportModal}
+                        onHide={() => setShowImportModal(false)}
+                        onImport={handleImport}
+                    />
                     <Footer/>
                 </div>
             </GreenhouseDataLayoutProvider>

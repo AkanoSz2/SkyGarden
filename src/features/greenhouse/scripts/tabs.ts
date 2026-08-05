@@ -31,6 +31,7 @@ export function addTab(
                         .filter(p =>
                             p.type === "output" ||
                             p.type === "intermediate" ||
+                            p.type == "forced" ||
                             (p.type === "input" && getCrop(p.crop.split("#")[0]))
                         )
                         .map(p => p.instanceId)
@@ -97,6 +98,18 @@ export function deleteTab(
     const deletedId = parseInt(key, 10);
     setGreenhouseTabData(prev => prev.filter(t => t.id < deletedId));
 };
+
+
+export function syncTabsFromImport(
+    data: GreenhouseTabData[],
+    setTabs: React.Dispatch<React.SetStateAction<string[]>>,
+    setActive: React.Dispatch<React.SetStateAction<string>>
+) {
+    const ids = data.map(t => t.id).sort((a, b) => a - b);
+    const keys = ids.length ? ids.map(id => `${id}`) : ["1"];
+    setTabs(keys);
+    setActive(keys[0]);
+}
 
 export function printCropMap(tabName: string, getTabData: (id: number) => GreenhouseTabData) {
     const id = parseInt(tabName, 10);

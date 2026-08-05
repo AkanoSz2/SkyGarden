@@ -20,6 +20,18 @@ export function emptyGrid(): string[] {
     return Array.from({length: 100}, () => "empty");
 }
 
+export function syncInstanceCounter(data: GreenhouseTabData[]) {
+    let maxSeen = -1;
+    for (const tab of data) {
+        for (const placement of tab.placements) {
+            const suffix = placement.instanceId.split("#").pop();
+            const n = parseInt(suffix ?? "", 10);
+            if (!isNaN(n) && n > maxSeen) maxSeen = n;
+        }
+    }
+    if (maxSeen >= globalInstanceCounter) globalInstanceCounter = maxSeen + 1;
+}
+
 export const getBaseId = (id: string) => id.split("#")[0];
 export const getCropData = (id: string) => getCrop(getBaseId(id)) || getMutation(getBaseId(id));
 export const getCropSize = (id: string) => getCropData(id)?.size ?? 1;
@@ -72,7 +84,7 @@ export function validateGrid(placements: PlacementEntry[], gridState: string[]):
 
             if (placement.type == "output") {
                 isValid = false;
-                const rawRequirements = cropEntry?.requirements;
+                const rawRequirements = cropEntry?.requirements ?? [];
                 const requirementRecord: Record<string, number> = {};
                 for (const entry of rawRequirements) {
                     const [reqCrop, reqCount] = [entry.crop, entry.count];
@@ -106,7 +118,8 @@ export function placeCrop(
     selectedType: string | undefined,
     activeTab: number,
     setGreenhouseTabData: React.Dispatch<React.SetStateAction<GreenhouseTabData[]>>,
-    placedByUser: boolean = true
+    placedByUser: boolean = true,
+    forcePlace: boolean = false
 ) {
 
     if (!selectedCrop) return;
@@ -140,7 +153,10 @@ export function placeCrop(
             type: entryType,
             valid: true,
             placedByUser: placedByUser,
+            forcePlaced: forcePlace
         };
+
+
 
         const nextPlacements = [
             ...currentPlacements
@@ -152,9 +168,13 @@ export function placeCrop(
         const validityById = validateGrid(nextPlacements, nextCells);
         const finalPlacements = nextPlacements.map(p => ({
             ...p,
-            valid: validityById.get(p.instanceId) ?? true,
+            valid: forcePlace && p.instanceId === instanceId
+                ? true
+                : validityById.get(p.instanceId) ?? true,
+            type: forcePlace && p.instanceId === instanceId? "forced" : p.type,
         }));
 
+        // console.table(finalPlacements)
         return prev.map(t =>
             t.id === activeTab ? {...t, cells: nextCells, placements: finalPlacements} : t
         );
@@ -175,11 +195,11 @@ export function removeCrop(
     if (!instanceId || instanceId === "empty") return;
     let placementType = placementTypeById.get(instanceId);
 
-    console.log(`Removing crop at index ${index}, instanceId: ${instanceId}, placementType: ${placementType}, selectedType: ${selectedType}`);
 
-    if (placementType == "intermediate") placementType = "output";
-    if(getCrop(instanceId.split("#")[0])) placementType = "input";
+    if (placementType == "intermediate" || placementType == "forced") placementType = "output";
+    if(getCrop(instanceId.split("#")[0]) && selectedType !== "helper") placementType = "input";
     if (selectedType && placementType !== selectedType) return;
+
 
     setGreenhouseTabData(prev => {
         const tab = prev.find(t => t.id === activeTab);
@@ -208,6 +228,9 @@ export function getTypeColor(typeForColor: string | undefined, validForColor: bo
         case "input":
             border = legendItems.input.color;
             break;
+        case "forced":
+            border = legendItems.forced.color;
+            break;
         case "output":
             border = validForColor ? legendItems.output.color : legendItems.invalid.color;
             break;
@@ -223,4 +246,3 @@ export function getTypeColor(typeForColor: string | undefined, validForColor: bo
     }
     return border;
 }
-

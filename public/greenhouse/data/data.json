@@ -1067,7 +1067,12 @@
       "name": "Shellfruit",
       "size": 1,
       "ground": "farmland",
-      "requirements": [],
+      "requirements": [
+        {
+          "crop": "blastberry",
+          "count": 4
+        }
+      ],
       "special": "explode_turtlellini_with_blastberry",
       "rarity": "epic",
       "growth_stages": 0,
