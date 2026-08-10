@@ -5,6 +5,7 @@ import {useState} from "react";
 import {GreenhouseLayout, SidebarHelper, InputCrops, ImportModal, syncTabsFromImport, syncInstanceCounter } from "../features/greenhouse";
 
 import {PlayerDataProvider} from "../context/PlayerDataContext.tsx";
+import {BazaarDataProvider} from "../context/BazaarDataContext.tsx";
 
 import {CropFilterHelper, RatesPanel, TotalCollection} from "../features/calculator/components/RatesPanel.tsx";
 import {type GeneratorItem} from "../features/generator/types.ts";
@@ -47,6 +48,7 @@ export function Greenhouse() {
     return (
         <PlayerDataProvider>
             <GreenhouseDataLayoutProvider greenhouseTabData={greenhouseTabData}>
+                <BazaarDataProvider>
                 <div data-bs-theme="dark" className="bg-dark">
                     <Navbar/>
                     <div
@@ -138,6 +140,7 @@ export function Greenhouse() {
                     />
                     <Footer/>
                 </div>
+                </BazaarDataProvider>
             </GreenhouseDataLayoutProvider>
         </PlayerDataProvider>
     );

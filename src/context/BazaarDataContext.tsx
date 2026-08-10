@@ -1,14 +1,20 @@
-import {createContext} from "react";
-import {useGreenhouseLayoutData} from "../hooks/useGreenhouseLayoutData.ts";
+import { createContext, useContext } from "react";
+import { useBazaarItemData } from "../hooks/useBazaarData";
 
-const GreenhouseDataLayoutContext = createContext<ReturnType<typeof useGreenhouseLayoutData> | null>(null);
+const BazaarDataContext = createContext<ReturnType<typeof useBazaarItemData> | null>(null);
 
-
-function BazaarDataContext() {
+export function BazaarDataProvider({ children }: { children: React.ReactNode }) {
+    const bazaarData = useBazaarItemData();
     return (
-        <GreenhouseDataLayoutContext.Provider value={greenhouseDataLayout}>
+        <BazaarDataContext.Provider value={bazaarData}>
             {children}
-        </GreenhouseDataLayoutContext.Provider>
+        </BazaarDataContext.Provider>
+
     );
 }
+
+export function useBazaarDataContext() {
+    const ctx = useContext(BazaarDataContext);
+    if (!ctx) throw new Error("useBazaarDataContext must be used inside BazaarDataProvider");
+    return ctx;
 }

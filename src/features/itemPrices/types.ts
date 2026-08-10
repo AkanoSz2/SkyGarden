@@ -18,5 +18,7 @@ export interface BazaarProduct {
 export interface BazaarItem {
     productId: string;
     buyPrice: number;
+    buyOrder: number;
     sellPrice: number;
+    sellOrder: number;
 }

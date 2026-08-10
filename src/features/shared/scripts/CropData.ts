@@ -93,5 +93,5 @@ export function getMutation(id: Mutation) {
 
 export async function getEffects(){
     const response = await fetch('/greenhouse/data/data.json');
-    console.log(response["effects"])
+    if (!response.ok) throw new Error(`Failed to load crop data: ${response.statusText}`);
 }

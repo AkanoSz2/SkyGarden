@@ -1,21 +1,23 @@
-import { useState } from "react";
+import {useState} from "react";
 import {
-    formatCropName,
-    RarityColors,
-    type Rarity,
     CropRarityMap,
+    formatCropName,
     getCrop,
-    getMutation
+    getMutation,
+    type Rarity,
+    RarityColors
 } from "../../shared/scripts/CropData.ts";
 
 
-import { useGreenhouseDataLayoutContext } from "../../../context/GreenhouseDataLayoutContext.tsx";
-import { usePlayerDataContext } from "../../../context/PlayerDataContext.tsx";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
+import {useGreenhouseDataLayoutContext} from "../../../context/GreenhouseDataLayoutContext.tsx";
+import {usePlayerDataContext} from "../../../context/PlayerDataContext.tsx";
+import {useBazaarDataContext} from "../../../context/BazaarDataContext.tsx";
 import Select from "react-select";
-import {getBazaarPrice} from "../../itemPrices";
 
+
+import { CropDecryptedMap } from "../../itemPrices/data/extraItems.ts";
+
+import {CropMultipliers} from "../../shared/types.ts";
 
 const GreenhouseCount = 3
 const miningFortune = 2000
@@ -38,6 +40,7 @@ type CollectionItem = {
     cropId: string;
     value: number;
 };
+
 
 function changeScale(value: number, fromScale: string, toScale: string): number {
     const ScalesDict: Record<string, number> = {
@@ -65,38 +68,53 @@ function formatScaled(value: number): string {
 }
 
 
-function fortuneDropsFormula(userData: ReturnType<typeof usePlayerDataContext>, crop: string,  base: number, placedCrops: number, cropName?: string): number {
+function getFarmingFortune(userData: ReturnType<typeof usePlayerDataContext>, crop: string): number {
+    const tracking = userData.leaderboardData.currrentlyTracking;
+
+    if (!userData.playerData || !tracking) {
+        return 0;
+    }
+
+    const cropFortuneData = userData.playerData.fortune.breakthrough["cropFortune"][tracking];
+
+    if (!cropFortuneData) {
+        return 0;
+    }
+
+    const baseFortuneAndTool = cropFortuneData["finalFortune"];
+    const targettedCropFortune = cropFortuneData["actualCropFortune"];
+
+    if (crop.toLowerCase() === tracking.toLowerCase()) {
+        return targettedCropFortune;
+    }
+
+    return baseFortuneAndTool;
+}
+
+function fortuneDropsFormula(userData: ReturnType<typeof usePlayerDataContext>, crop: string, base: number, placedCrops: number, cropName?: string): number {
     const gardenCustomization = userData?.gardenCustomization ?? {};
-    const {cropEffectYield, uniqueCrops, deskYield} = gardenCustomization;
+    const { cropEffectYield, uniqueCrops, deskYield } = gardenCustomization;
 
     let actualYieldValue = 0;
-    if (deskYield < 9)  actualYieldValue = 2 * deskYield;
-    if( deskYield >= 9) actualYieldValue += 4;
+    if (deskYield < 9) actualYieldValue = 2 * deskYield;
+    if (deskYield >= 9) actualYieldValue += 4;
 
-
-    const tracking = userData.leaderboardData.currrentlyTracking
-    const chipLevel = userData.playerData.fortune.stats.chipStats["evergreen"]
-
-    const baseFortune = userData.playerData.fortune.breakthrough["totalBaseFortune"]
-    const baseFortuneAndTool = userData.playerData.fortune.breakthrough["cropFortune"][tracking]["finalFortune"]
-    const targettedCropFortune = userData.playerData.fortune.breakthrough["cropFortune"][tracking]["actualCropFortune"]
+    const chipLevel = userData.playerData.fortune.stats.chipStats["evergreen"];
 
     const tools = userData?.playerData.fortune.stats.items["tools"].items;
-    const correctTool = tools?.find(tool => tool.cropName.toLowerCase() === tracking.toLowerCase()) ?? null;
+    const correctTool = tools?.find(tool => tool.cropName.toLowerCase() === userData.leaderboardData.currrentlyTracking.toLowerCase()) ?? null;
 
-    let fortune = baseFortuneAndTool;
-
-    if( crop.toLowerCase() === tracking.toLowerCase()) fortune = targettedCropFortune;
+    const fortune = getFarmingFortune(userData, crop);
 
     let result = (
-        (1 + ( 3 * uniqueCrops + actualYieldValue + actualYieldValue  + chipLevel) / 100) *
+        (1 + (3 * uniqueCrops + actualYieldValue + cropEffectYield + chipLevel) / 100) *
         (1 + chipLevel / 100) *
         (1 + fortune / 100) *
         base * placedCrops
-    )
-    if(cropName === "chloronite") result  = base * placedCrops * (miningFortune / 500)
+    );
+    if (cropName === "chloronite") result = base * placedCrops * (miningFortune / 500);
 
-    return Math.trunc(result  * GreenhouseCount)
+    return Math.trunc(result * GreenhouseCount);
 }
 
 
@@ -224,12 +242,9 @@ function CropInfo({
 
             {/* Count */}
             <div
-                className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 fw-semibold"
+                className="border rounded-1 px-2 py-1 fw-semibold"
                 style={{
-                    width: "50px",
-                    height: "40px",
                     background: "#1e2b3d",
-                    border: "1px solid #3a4b63",
                     color: "#cbd5e1",
                     fontSize: "16px",
                 }}
@@ -263,7 +278,7 @@ function CollectionGain({items, placedMutations, cropName}: { items: CollectionI
                 </div>
             ) : (
                 Object.entries(items).map(([cropId, amount]) => {
-                    const rawValue = fortuneDropsFormula(userData, cropId, amount, placedMutations, cropName);
+                    const rawValue = fortuneDropsFormula(userData, cropId, amount, placedMutations, cropName)
                     return (
                         <CropInfoRow
                             key={cropId}
@@ -277,7 +292,26 @@ function CollectionGain({items, placedMutations, cropName}: { items: CollectionI
     )
 }
 
-function SowdustGain({sowdustPer, amount }: {sowdustPer: number, amount: number }) {
+function applySowdustFormula(userData: ReturnType<typeof usePlayerDataContext>, amount: number, placedCrops: number, cropName: string): number {
+
+    const fortune = getFarmingFortune(userData, userData.leaderboardData.currrentlyTracking);
+    const multiplier = CropMultipliers[cropName] ?? 1;
+
+    return (
+        5 * (amount / (5 * multiplier)) * (1 + fortune / 100) * placedCrops * GreenhouseCount
+    )
+}
+
+function SowdustGain({drops, amount }: {
+    drops: Record<string, number>;
+    amount: number
+}) {
+    const userData = usePlayerDataContext();
+
+    let totalSowdust = 0;
+    for(const [cropId, dropAmount] of Object.entries(drops)) {
+        totalSowdust += applySowdustFormula(userData, dropAmount, amount, cropId);
+    }
     return (
         <div
             style={{
@@ -293,11 +327,51 @@ function SowdustGain({sowdustPer, amount }: {sowdustPer: number, amount: number 
 
             <SectionPill title={"Sowdust"} description={"Total Sowdust gained"} color={"#15702e"}/>
             <div style={{ fontSize: "12px", color: "#cbd5e1", padding: "4px 0" }}>
-                <CropInfoRow label={"dead_plant"} value={sowdustPer * amount}/>
+                <CropInfoRow label={"sowdust"} value={formatScaled(totalSowdust).toString()}/>
             </div>
         </div>
     )
 }
+
+function bazaarItem(rawValue: number, bazaarData: ReturnType<typeof useBazaarDataContext>, cropId: string, type: string) {
+
+     if(CropDecryptedMap[cropId.toLowerCase()]) cropId = CropDecryptedMap[cropId.toLowerCase()]
+
+    const itemData = bazaarData.items[cropId.toUpperCase()];
+
+    if (!itemData) {
+        console.warn(`No bazaar data found for cropId: ${cropId}`);
+        return 0;
+    }
+    let multiplier = 1;
+    switch (type) {
+        case "sellOrder":
+            multiplier = itemData.sellOrder;
+            break;
+        case "buyOrder":
+            multiplier = itemData.buyOrder;
+            break;
+        case "buyPrice":
+            multiplier = itemData.buyPrice;
+            break;
+        case "sellPrice":
+            multiplier = itemData.sellPrice;
+            break;
+    }
+
+
+    if (multiplier === undefined || multiplier === null) {
+        console.warn(`No sell price found for cropId: ${cropId}`);
+        return 0;
+    }
+    return rawValue * multiplier;
+
+}
+
+function calculateRngs(userData: ReturnType<typeof usePlayerDataContext>){
+     const ob = 0;
+}
+
 
 function ProfitGain({
                         cropName,
@@ -310,15 +384,38 @@ function ProfitGain({
     requirements: Record<string, number>;
     count: number;
 }) {
+
+    let totalOutput = 0;
+
     const requirementEntries = Object.entries(
         requirements as unknown as Record<string, { crop: string; count: number }>
     );
-    const dropEntries = Object.entries(drops);
+
+    const playerData = usePlayerDataContext();
+    const bazaar = useBazaarDataContext();
+
+
+    const dropEntries = []
+    for(const [cropId, amount] of Object.entries(drops)) {
+        const rawValue = fortuneDropsFormula(playerData, cropId, amount, count, cropName);
+        const bazaarValueRaw = bazaarItem(rawValue, bazaar, cropId, "sellPrice").toFixed(0);
+        const bazaarValueBeauty = formatScaled(parseInt(bazaarValueRaw));
+        dropEntries.push([cropId, bazaarValueBeauty]);
+        totalOutput += parseInt(bazaarValueRaw);
+    }
+
+    const mutationValue = bazaarItem(count, bazaar, cropName, "sellPrice").toFixed(0);
+    let mutationValueBeauty = 0;
+    if(!CropRarityMap["crops"].includes(cropName)) {
+        mutationValueBeauty = formatScaled(parseInt(mutationValue)).toString();
+        totalOutput += parseInt(mutationValue);
+    }
 
     const totalCost = requirementEntries.reduce((sum, [, { count }]) => sum + count, 0);
-    const totalOutput = dropEntries.reduce((sum, [, amount]) => sum + amount, 0);
+    const rngs = 0;
     const netProfit = totalOutput - totalCost;
     const isProfit = netProfit >= 0;
+
     return (
         <div
             style={{
@@ -350,14 +447,10 @@ function ProfitGain({
 
                     {requirementEntries.length === 0 ? (
                         CropRarityMap["crops"].includes(cropName) ? (
-                            <div style={{ fontSize: "12px", color: "#475569", padding: "4px 0" }}>
-                                <CropInfoRow key={cropName} label={cropName} value={count.toString()} />
-                            </div>
-                        ) : (
-                            <div style={{ fontSize: "12px", color: "#475569", padding: "4px 0" }}>
+                            <div style={{fontSize: "12px", color: "#475569", padding: "4px 0"}}>
                                 No requirements data.
                             </div>
-                        )
+                        ) : null
                     ) : (
                         requirementEntries.map(([key, { crop, count }]) => (
                             <CropInfoRow key={key} label={crop} value={count.toString()} />
@@ -404,7 +497,13 @@ function ProfitGain({
                     >
                         Mutation
                     </div>
-                    <CropInfoRow key={cropName} label={cropName} value={count.toString()} />
+                    {(CropRarityMap["crops"].includes(cropName)) ? (
+                        <div style={{fontSize: "12px", color: "#475569", padding: "4px 0"}}>
+                            No Mutation Drops
+                        </div>
+                    ) : (
+                            <CropInfoRow key={cropName} label={cropName} value={mutationValueBeauty} />
+                    )}
                 </div>
                 <div>
                     <div
@@ -647,7 +746,7 @@ function PillTabs({
 function RatesCropBreakdown({ row }: { row: TableGreenhouseRow | null }) {
     const tabData = [
         { key: "day", title: "Per day" },
-        { key: "total", title: "Total" },
+        { key: "total", title: "Full Harvest" },
     ];
     const [activeTab, setActiveTab] = useState("day");
 
@@ -667,7 +766,7 @@ function RatesCropBreakdown({ row }: { row: TableGreenhouseRow | null }) {
                         <PillTabs tabs={tabData} activeKey={activeTab} onChange={setActiveTab} />
                     </div>
                     <CropInfo  itemName={row.id} rarity={row.rarity} toolName={correctTool.id} count={row.count}  />
-                    <SowdustGain sowdustPer={row.sowdust} amount={row.count} />
+                    <SowdustGain drops={row.drops} amount={row.count} />
                     <CollectionGain items={row.drops} placedMutations={row.count} cropName={row.id} />
                     <ProfitGain cropName={row.id} drops={row.drops} requirements={row.requirements} count={row.count} />
                 </>
@@ -1020,6 +1119,7 @@ function FilteredTotalCollection({ selectedCrop }: { selectedCrop: string | null
                 cropsList.push({
                     id: row.id,
                     drops: cropDrops[selectedCrop],
+                    count: row.count,
                 });
             }
         }
@@ -1031,9 +1131,10 @@ function FilteredTotalCollection({ selectedCrop }: { selectedCrop: string | null
         ...crop,
         value: fortuneDropsFormula(
             userData,
-            crop.id,
+            selectedCrop,
             crop.drops,
-            greenhouseRows.find(r => r.id === crop.id)?.count || 0
+            crop.count,
+            crop.id
         ),
     }));
 

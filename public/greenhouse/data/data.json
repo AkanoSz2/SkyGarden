@@ -9,11 +9,12 @@
         "harvest_boost"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "wheat": 80
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "potato": {
       "name": "Potato",
@@ -24,11 +25,12 @@
         "immunity"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "potato": 150
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "carrot": {
       "name": "Carrot",
@@ -39,11 +41,12 @@
         "xp_boost"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "carrot": 175
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "pumpkin": {
       "name": "Pumpkin",
@@ -54,11 +57,12 @@
         "bonus_drops"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "pumpkin": 68
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "melon": {
       "name": "Melon",
@@ -69,11 +73,12 @@
         "water_retain"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "melon": 320
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "cocoa_beans": {
       "name": "Cocoa Beans",
@@ -84,11 +89,12 @@
         "immunity"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "cocoa_beans": 160
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "sugar_cane": {
       "name": "Sugar Cane",
@@ -101,11 +107,12 @@
       "negative_buffs": [
         "harvest_loss"
       ],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "sugar_cane": 100
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "cactus": {
       "name": "Cactus",
@@ -118,11 +125,12 @@
       "negative_buffs": [
         "harvest_loss"
       ],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "cactus": 75
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "nether_wart": {
       "name": "Nether Wart",
@@ -135,11 +143,12 @@
       "negative_buffs": [
         "xp_loss"
       ],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "nether_wart": 240
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "red_mushroom": {
       "name": "Red Mushroom",
@@ -152,12 +161,13 @@
       "negative_buffs": [
         "water_drain"
       ],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "red_mushroom": 38,
         "brown_mushroom": 38
-      }
+      },
+      "maximum": 288,
+      "dayMax": 791
     },
     "brown_mushroom": {
       "name": "Brown Mushroom",
@@ -170,12 +180,13 @@
       "negative_buffs": [
         "water_drain"
       ],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "red_mushroom": 38,
         "brown_mushroom": 38
-      }
+      },
+      "maximum": 288,
+      "dayMax": 791
     },
     "moonflower": {
       "name": "Moonflower",
@@ -186,11 +197,12 @@
         "bonus_drops"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "moonflower": 160
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "sunflower": {
       "name": "Sunflower",
@@ -201,11 +213,12 @@
         "bonus_drops"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "sunflower": 160
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "wild_rose": {
       "name": "Wild Rose",
@@ -216,11 +229,12 @@
         "effect_spread"
       ],
       "negative_buffs": [],
-      "sowdust_per_crop": 110,
       "farming_xp_per_crop": 320,
       "drops": {
         "wild_rose": 160
-      }
+      },
+      "maximum": 288,
+      "dayMax": null
     },
     "fire": {
       "name": "Fire",
@@ -229,9 +243,10 @@
       "growth_stages": null,
       "positive_buffs": [],
       "negative_buffs": [],
-      "sowdust_per_crop": 0,
       "farming_xp_per_crop": 0,
-      "drops": {}
+      "drops": {},
+      "maximum": null,
+      "dayMax": null
     },
     "dead_plant": {
       "name": "Dead Plant",
@@ -240,8 +255,9 @@
       "growth_stages": null,
       "positive_buffs": [],
       "negative_buffs": [],
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": null,
+      "dayMax": null
     },
     "fermento": {
       "name": "Fermento",
@@ -250,8 +266,9 @@
       "growth_stages": null,
       "positive_buffs": [],
       "negative_buffs": [],
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": null,
+      "dayMax": null
     }
   },
   "mutations": {
@@ -281,8 +298,9 @@
       "drops": {
         "nether_wart": 360
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 153,
+      "dayMax": 428.4
     },
     "choconut": {
       "name": "Choconut",
@@ -304,8 +322,9 @@
       "drops": {
         "cocoa_beans": 200
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "dustgrain": {
       "name": "Dustgrain",
@@ -327,8 +346,9 @@
       "drops": {
         "wheat": 100
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "gloomgourd": {
       "name": "Gloomgourd",
@@ -356,8 +376,9 @@
         "pumpkin": 30,
         "melon": 140
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "lonelily": {
       "name": "Lonelily",
@@ -377,8 +398,9 @@
         "potato": 600,
         "pumpkin": 340
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": null,
+      "dayMax": null
     },
     "scourroot": {
       "name": "Scourroot",
@@ -406,8 +428,9 @@
         "carrot": 122,
         "potato": 105
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "shadevine": {
       "name": "Shadevine",
@@ -437,8 +460,9 @@
         "sugar_cane": 90,
         "cactus": 68
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "veilshroom": {
       "name": "Veilshroom",
@@ -467,8 +491,9 @@
         "red_mushroom": 33,
         "brown_mushroom": 33
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 210,
+      "dayMax": 588.0
     },
     "witherbloom": {
       "name": "Witherbloom",
@@ -490,8 +515,9 @@
       "drops": {
         "wild_rose": 300
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 153,
+      "dayMax": 428.4
     },
     "chocoberry": {
       "name": "Chocoberry",
@@ -519,8 +545,9 @@
         "melon": 1600,
         "cocoa_beans": 400
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 59.2
     },
     "cindershade": {
       "name": "Cindershade",
@@ -550,8 +577,9 @@
         "nether_wart": 1200,
         "wild_rose": 800
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 46.67
     },
     "coalroot": {
       "name": "Coalroot",
@@ -579,8 +607,9 @@
         "potato": 600,
         "nether_wart": 600
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 46.67
     },
     "creambloom": {
       "name": "Creambloom",
@@ -602,8 +631,9 @@
       "drops": {
         "cocoa_beans": 1600
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 59.2
     },
     "duskbloom": {
       "name": "Duskbloom",
@@ -639,8 +669,9 @@
         "sunflower": 533,
         "moonflower": 533
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 46.67
     },
     "thornshade": {
       "name": "Thornshade",
@@ -668,8 +699,9 @@
         "red_mushroom": 190,
         "brown_mushroom": 190
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 46.67
     },
     "blastberry": {
       "name": "Blastberry",
@@ -701,8 +733,9 @@
         "cocoa_beans": 1200,
         "nether_wart": 1800
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 59.2
     },
     "cheesebite": {
       "name": "Cheesebite",
@@ -734,8 +767,9 @@
         "red_mushroom": 190,
         "brown_mushroom": 190
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 37.71
     },
     "chloronite": {
       "name": "Chloronite",
@@ -766,8 +800,9 @@
         "red_mushroom": 95,
         "brown_mushroom": 95
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 188.57
     },
     "do_not_eat_shroom": {
       "name": "Do-not-eat-shroom",
@@ -799,8 +834,9 @@
         "red_mushroom": 380,
         "brown_mushroom": 380
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 46.67
     },
     "fleshtrap": {
       "name": "Fleshtrap",
@@ -830,8 +866,9 @@
         "potato": 1200,
         "pumpkin": 680
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 77.33
     },
     "magic_jellybean": {
       "name": "Magic Jellybean",
@@ -862,8 +899,9 @@
         "sunflower": 600,
         "moonflower": 600
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": -9.94
     },
     "noctilume": {
       "name": "Noctilume",
@@ -894,8 +932,9 @@
         "cactus": 1200,
         "wild_rose": 1600
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 26,
+      "dayMax": 42.25
     },
     "snoozling": {
       "name": "Snoozling",
@@ -937,8 +976,9 @@
         "sunflower": 800,
         "moonflower": 800
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 12,
+      "dayMax": 3.83
     },
     "soggybud": {
       "name": "Soggybud",
@@ -965,8 +1005,9 @@
       "drops": {
         "melon": 3200
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 152,
+      "dayMax": 119.43
     },
     "chorus_fruit": {
       "name": "Chorus Fruit",
@@ -997,8 +1038,9 @@
         "potato": 1500,
         "sugar_cane": 2000
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 27,
+      "dayMax": 30.52
     },
     "plantboy_advance": {
       "name": "PlantBoy Advance",
@@ -1027,8 +1069,9 @@
         "sunflower": 1200,
         "moonflower": 1200
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 12,
+      "dayMax": 7.75
     },
     "puffercloud": {
       "name": "Puffercloud",
@@ -1060,8 +1103,9 @@
         "red_mushroom": 665,
         "brown_mushroom": 665
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 33,
+      "dayMax": 17.72
     },
     "shellfruit": {
       "name": "Shellfruit",
@@ -1070,7 +1114,7 @@
       "requirements": [
         {
           "crop": "blastberry",
-          "count": 4
+          "count": 2
         }
       ],
       "special": "explode_turtlellini_with_blastberry",
@@ -1087,8 +1131,9 @@
         "melon": 800,
         "cocoa_beans": 400
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 192,
+      "dayMax": 2688.0
     },
     "startlevine": {
       "name": "Startlevine",
@@ -1119,8 +1164,9 @@
         "sugar_cane": 2000,
         "cactus": 1500
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 31.0
     },
     "stoplight_petal": {
       "name": "Stoplight Petal",
@@ -1151,8 +1197,9 @@
         "cactus": 2400,
         "wild_rose": 3200
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 12,
+      "dayMax": 7.61
     },
     "thunderling": {
       "name": "Thunderling",
@@ -1182,8 +1229,9 @@
         "cactus": 900,
         "wild_rose": 2400
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 39,
+      "dayMax": 17.0
     },
     "turtlellini": {
       "name": "Turtlellini",
@@ -1208,8 +1256,9 @@
       ],
       "negative_buffs": [],
       "drops": {},
-      "sowdust_per_crop": 2000,
-      "farming_xp_per_crop": 8000
+      "farming_xp_per_crop": 8000,
+      "maximum": 48,
+      "dayMax": 154.56
     },
     "zombud": {
       "name": "Zombud",
@@ -1243,8 +1292,9 @@
         "pumpkin": 1190,
         "wild_rose": 2800
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 86.4
     },
     "all_in_aloe": {
       "name": "All-in Aloe",
@@ -1274,8 +1324,9 @@
         "sunflower": 100,
         "moonflower": 100
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 287.7
     },
     "devourer": {
       "name": "Devourer",
@@ -1308,8 +1359,9 @@
         "red_mushroom": 950,
         "brown_mushroom": 950
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 21.6
     },
     "glasscorn": {
       "name": "Glasscorn",
@@ -1340,8 +1392,9 @@
         "potato": 4800,
         "cactus": 2400
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 26,
+      "dayMax": 25.28
     },
     "godseed": {
       "name": "Godseed",
@@ -1378,8 +1431,9 @@
         "red_mushroom": 117,
         "brown_mushroom": 117
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": null,
+      "dayMax": null
     },
     "jerryflower": {
       "name": "Jerryflower",
@@ -1394,8 +1448,9 @@
       "negative_buffs": [],
       "growing_info": "Obtain a Unfulfilled Jerryseed from a Jerry Visitor and take it to Xalx in the Crystal Hollows with a Mysterious Crop. He will give you back an Unripe Jerryseed that you have to reforge to a Dirty Unripe Jerryseed and take to Dirt in the Dwarven Mines. Dirt will give you the Fertilized Jerryseed in return. When growing, Jerryflower will stop at Stage 5 until it is fed 10x Move Jerry.",
       "drops": {},
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": null,
+      "dayMax": null
     },
     "phantomleaf": {
       "name": "Phantomleaf",
@@ -1424,8 +1479,9 @@
         "carrot": 5600,
         "potato": 4800
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 23.58
     },
     "timestalk": {
       "name": "Timestalk",
@@ -1461,8 +1517,9 @@
         "sugar_cane": 4000,
         "cactus": 3000
       },
-      "sowdust_per_crop": 0,
-      "farming_xp_per_crop": 0
+      "farming_xp_per_crop": 0,
+      "maximum": 48,
+      "dayMax": 25.78
     }
   },
   "effects": {

@@ -12,7 +12,7 @@ export function useBazaarItemData() {
         async function fetchBazaar() {
             try {
                 setLoading(true);
-                const res = await fetch("http://localhost:3001/bazaar");
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bazaar`);
                 if (!res.ok) {
                     const body = await res.json().catch(() => null);
                     throw new Error(body?.error ?? `Request failed: ${res.status}`);
@@ -32,5 +32,6 @@ export function useBazaarItemData() {
         };
     }, []);
 
+    
     return { items, loading, error };
 }

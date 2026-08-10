@@ -18,6 +18,11 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
     for(const entry in greenhouseTabData) {
         for (const placement of greenhouseTabData[entry].placements) {
             const cropName = placement.crop.split("#")[0];
+            if (
+                placement.type !== "output" && placement.type !== "forced"
+                // placement.type !== "intermediate"
+            ) continue;
+            if (placement.valid === false) continue;
 
             if (!totals[cropName]) {
                 totals[cropName] = {
@@ -30,11 +35,6 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
                 };
             }
 
-            if (
-                placement.type !== "output" && placement.type !== "forced"
-                // placement.type !== "intermediate"
-            ) continue;
-            if (placement.valid === false) continue;
 
             const placementSize = getCropData(cropName)?.size ?? getMutation(cropName)?.size ?? {width: 1, height: 1};
             const count = placement.positions.length / (placementSize ** 2);
@@ -47,8 +47,8 @@ export function useGreenhouseLayoutData(greenhouseTabData: GreenhouseTabData[]){
             totals[cropName].requirements = {
                 ...totals[cropName].requirements, ...getCropData(cropName)?.requirements ?? getMutation(cropName)?.requirements ?? {}
             }
+            totals[cropName].sowdust = sowdust;
         }
     }
-
     return totals;
 }

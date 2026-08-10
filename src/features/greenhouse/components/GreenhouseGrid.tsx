@@ -146,7 +146,7 @@ export function GreenhouseGrid({
                             }}
                             onContextMenu={(e) => {
                                 e.preventDefault();
-                                removeCrop(index, gridCells, placementTypeById, selectedType, activeTab, setGreenhouseTabData);
+                                removeCrop(index, gridCells, placementTypeById, selectedType, activeTab, setGreenhouseTabData, forcePlace);
                             }}
                         />
                     );

@@ -49,6 +49,7 @@ export function addTab(
                 const result: typeof sourceTab.placements = [];
 
                 for (const p of sourceTab.placements) {
+                    if(p.instanceId.includes("dead_plant")) continue;
                     if (carryableIds.has(p.instanceId) && positionsById.has(p.instanceId)) {
                         result.push({
                             ...p,
@@ -128,7 +129,7 @@ export function printCropMap(tabName: string, getTabData: (id: number) => Greenh
 
     const placements = tabData.placements;
 
-    const historyTable = placements.map(entry => {
+    placements.map(entry => {
         const rows = entry.positions.map(p => Math.floor(p / GRID));
         const cols = entry.positions.map(p => p % GRID);
         const type = entry.type;

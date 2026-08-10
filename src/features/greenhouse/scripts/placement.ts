@@ -187,7 +187,8 @@ export function removeCrop(
     placementTypeById: Map<string, string | undefined>,
     selectedType: GreenhouseLayoutProps["selectedType"],
     activeTab: GreenhouseLayoutProps["activeTab"],
-    setGreenhouseTabData: GreenhouseLayoutProps["setGreenhouseTabData"]
+    setGreenhouseTabData: GreenhouseLayoutProps["setGreenhouseTabData"],
+    forcePlace: boolean = false
 ) {
 
     const instanceId = gridCells[index];
@@ -195,10 +196,11 @@ export function removeCrop(
     if (!instanceId || instanceId === "empty") return;
     let placementType = placementTypeById.get(instanceId);
 
-
-    if (placementType == "intermediate" || placementType == "forced") placementType = "output";
-    if(getCrop(instanceId.split("#")[0]) && selectedType !== "helper") placementType = "input";
-    if (selectedType && placementType !== selectedType) return;
+    if(!forcePlace) {
+        if (placementType == "intermediate" || placementType == "forced") placementType = "output";
+        if (getCrop(instanceId.split("#")[0]) && selectedType !== "helper") placementType = "input";
+        if (selectedType && placementType !== selectedType) return;
+    }
 
 
     setGreenhouseTabData(prev => {
